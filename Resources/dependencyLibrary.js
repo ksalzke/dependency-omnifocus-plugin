@@ -65,10 +65,10 @@ var _ = (function() {
 	dependencyLibrary.checkDependantsForTaskAndAncestors = task => {
 		// get list of all "parent" tasks (up to project level)
 		listOfTasks = [task];
-		parent = getParent(task);
+		parent = dependencyLibrary.getParent(task);
 		while (parent !== null) {
 			listOfTasks.push(parent);
-			parent = getParent(parent);
+			parent = dependencyLibrary.getParent(parent);
 		}
 
 		// check this task, and any parent tasks, for dependants
