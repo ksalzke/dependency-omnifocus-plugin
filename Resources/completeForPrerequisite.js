@@ -19,7 +19,7 @@ var _ = (function() {
       selection = document.windows[0].selection;
     }
 
-    task = selection.tasks[0];
+    task = selection.tasks[0] || selection.projects[0].task;
 
     task.markComplete();
 
@@ -58,6 +58,7 @@ var _ = (function() {
             return ApplyResult.Stop;
           }
         });
+
         // remove the prerequisite tag from the dependant task
         regexString =
           "[PREREQUISITE: omnifocus:///task/" + prerequisiteTaskId + "].+";
@@ -68,8 +69,11 @@ var _ = (function() {
         dependantTask.note = dependantTask.note.replace(regexForNoteSearch, "");
         // check whether any remaining prerequisite tasks listed in the note (i.e. whether all prerequisites completed) - and if so
         if (!/\[PREREQUISITE:/.test(dependantTask.note)) {
-          // if no remaining prerequisites, remove 'Waiting' tag from dependant task
+          // if no remaining prerequisites, remove 'Waiting' tag from dependant task (and if project set to Active)
           dependantTask.removeTag(dependantTag);
+          if (dependantTask.project !== null) {
+            dependantTask.project.status = Project.Status.Active;
+          }
         }
       }
     }
@@ -77,8 +81,8 @@ var _ = (function() {
 
   action.validate = function(selection, sender) {
     return (
-      selection.tasks.length === 1 &&
-      selection.tasks[0].tags.includes(tagNamed("🔑"))
+      (selection.tasks.length === 1 &&
+      selection.tasks[0].tags.includes(tagNamed("🔑"))) || (selection.projects.length === 1 && selection.projects[0].task.tags.includes(tagNamed("🔑")))
     );
   };
 
