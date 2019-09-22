@@ -1,13 +1,3 @@
-/*{
-	"type": "action",
-	"targets": ["omnifocus"],
-	"author": "Kaitlin Salzke",
-	"identifier": "com.KaitlinSalzke.checkPrerequisites",
-	"version": "1.0",
-	"description": "Check prerequisites",
-	"label": "Check Prerequisites",
-	"shortLabel": "Check Prerequisites"
-}*/
 var _ = (function() {
 	var action = new PlugIn.Action(function(selection, sender) {
 		// config

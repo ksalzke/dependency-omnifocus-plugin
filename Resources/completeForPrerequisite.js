@@ -1,13 +1,3 @@
-/*{
-	"type": "action",
-	"targets": ["omnifocus"],
-	"author": "Kaitlin Salzke",
-	"identifier": "com.KaitlinSalzke.completeForPrerequisite",
-	"version": "1.1,
-	"description": "Finds dependant tasks in the currently selected task's note; removes the prerequisite details from the dependant task's note; removes the 'Waiting' tag from the dependant task if no remaining prerequisites; and marks the current task as completed.",
-	"label": "Complete For Prerequisite",
-	"shortLabel": "Complete For Prerequisite"
-}*/
 var _ = (function() {
 	var action = new PlugIn.Action(function(selection, sender) {
 		// if called externally (from script) generate selection object

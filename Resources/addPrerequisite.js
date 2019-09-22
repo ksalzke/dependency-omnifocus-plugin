@@ -1,13 +1,3 @@
-/*{
-	"type": "action",
-	"targets": ["omnifocus"],
-	"author": "Kaitlin Salzke",
-	"identifier": "com.KaitlinSalzke.addPrerequisite",
-	"version": "1.0",
-	"description": "Tag selected tag as 'Waiting: Other task' and adds link in its note to task currently tagged 'Make Prerequisite'; then removes that tag from the prequisite task, replaces it with the actual prerequisite tag and updates the note of the prerequisite task with a link. NOTE: Currently only deals with one tagged task.",
-	"label": "Add Prerequisite",
-	"shortLabel": "Add Prerequisite"
-}*/
 var _ = (function() {
 	var action = new PlugIn.Action(function(selection, sender) {
 		// configure tags
