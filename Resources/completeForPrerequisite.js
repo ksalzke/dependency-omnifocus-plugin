@@ -43,8 +43,12 @@ var _ = (function() {
 _;
 
 function getParent(task) {
-	parent = null;
-	project = task.containingProject.task;
+  parent = null;
+  if (task.containingProject == null) {
+    project = inbox;
+  } else {
+    project = task.containingProject.task;
+  }
 	project.apply(item => {
 		if (item.children.includes(task)) {
 			parent = item;
