@@ -17,20 +17,39 @@ var _ = (function() {
 
 		task = selection.tasks[0] || selection.projects[0].task;
 
+		// get list of all "parent" tasks (up to project level)
+		listOfTasks = [task];
+		parent = getParent(task);
+		while (parent !== null) {
+			listOfTasks.push(parent);
+			parent = getParent(parent);
+		}
+
+		// mark the task as complete
 		task.markComplete();
 
-		this.dependencyLibrary.checkDependants(task);
+		// check this task, and any parent tasks, for dependants
+		listOfTasks.forEach(task => {
+			this.dependencyLibrary.checkDependants(task);
+		});
 	});
 
 	action.validate = function(selection, sender) {
-		return (
-			(selection.tasks.length === 1 &&
-				selection.tasks[0].tags.includes(tagNamed("🔑"))) ||
-			(selection.projects.length === 1 &&
-				selection.projects[0].task.tags.includes(tagNamed("🔑")))
-		);
+		return selection.tasks.length === 1 || selection.projects.length === 1;
 	};
 
 	return action;
 })();
 _;
+
+function getParent(task) {
+	parent = null;
+	project = task.containingProject.task;
+	project.apply(item => {
+		if (item.children.includes(task)) {
+			parent = item;
+			return ApplyResult.Stop;
+		}
+	});
+	return parent;
+}
