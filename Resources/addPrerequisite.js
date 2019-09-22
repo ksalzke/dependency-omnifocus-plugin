@@ -17,7 +17,7 @@ var _ = (function() {
       .tagNamed("⏳ Waiting")
       .tagNamed("🔒 Other task");
 
-    task = selection.tasks[0];
+    task = selection.tasks[0] || selection.projects[0].task;
 
     // GET PREREQUISITE
     // get all tasks tagged with 'prerequisite'
@@ -47,7 +47,7 @@ var _ = (function() {
   });
 
   action.validate = function(selection, sender) {
-    return selection.tasks.length === 1;
+    return (selection.tasks.length === 1 || selection.projects.length == 1) && tagNamed("Make Prerequisite").tasks.length == 1;
   };
 
   return action;
