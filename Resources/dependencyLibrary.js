@@ -10,22 +10,6 @@ var _ = (function() {
 		var prerequisiteTaskId = task.id.primaryKey;
 		var prerequisiteTask = task;
 
-		// check if created by another task
-		var createdByRegex = /\[CREATEDBY: omnifocus:\/\/\/task\/(.+)\]/g;
-		var createdByRegexResult = createdByRegex.exec(task.note);
-
-		if (createdByRegexResult != null) {
-			// for each captured task ID
-			prerequisiteTaskId = createdByRegexResult[1];
-			// get the task with that ID
-			tagNamed("🔑").tasks.forEach(function(task) {
-				if (task.id.primaryKey == prerequisiteTaskId) {
-					prerequisiteTask = task;
-					return ApplyResult.Stop;
-				}
-			});
-		}
-
 		if (prerequisiteTask.completed) {
 			// use regex to find [DEPENDANT: taskid] matches in the notes and capture task IDs
 			regex = /\[DEPENDANT: omnifocus:\/\/\/task\/(.+)\]/g;
