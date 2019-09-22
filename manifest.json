@@ -9,7 +9,7 @@
             "identifier": "addPrerequisite"
         },
         {
-            "identifier": "checkPrerequisite"
+            "identifier": "checkPrerequisites"
         },
         {
             "identifier": "completeForPrerequisite"
