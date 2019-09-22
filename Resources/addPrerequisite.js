@@ -1,11 +1,11 @@
 var _ = (function() {
 	var action = new PlugIn.Action(function(selection, sender) {
+		config = this.dependencyConfig;
+
 		// configure tags
-		markerTag = tagNamed("Make Prerequisite");
-		prerequisiteTag = tagNamed("🔑");
-		dependantTag = tagNamed("Activity Type")
-			.tagNamed("⏳ Waiting")
-			.tagNamed("🔒 Other task");
+		markerTag = config.markerTag();
+		prerequisiteTag = config.prerequisiteTag();
+		dependantTag = config.dependantTag();
 
 		task = selection.tasks[0] || selection.projects[0].task;
 
@@ -43,7 +43,7 @@ var _ = (function() {
 	action.validate = function(selection, sender) {
 		return (
 			(selection.tasks.length === 1 || selection.projects.length == 1) &&
-			tagNamed("Make Prerequisite").tasks.length == 1
+			this.dependencyConfig.markerTag().tasks.length == 1
 		);
 	};
 

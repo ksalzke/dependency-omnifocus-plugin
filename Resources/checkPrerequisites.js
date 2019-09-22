@@ -1,10 +1,9 @@
 var _ = (function() {
 	var action = new PlugIn.Action(function(selection, sender) {
 		// config
-		dependantTag = tagNamed("Activity Type")
-			.tagNamed("⏳ Waiting")
-			.tagNamed("🔒 Other task");
-		prerequisiteTag = tagNamed("🔑");
+		config = this.dependencyConfig;
+		dependantTag = config.dependantTag();
+		prerequisiteTag = config.prerequisiteTag();
 
 		dependencyLibrary = this.dependencyLibrary;
 

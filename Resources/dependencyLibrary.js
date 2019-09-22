@@ -1,10 +1,14 @@
 var _ = (function() {
 	var dependencyLibrary = new PlugIn.Library(new Version("1.0"));
 
+	dependencyLibrary.dependantTag = function() {
+		return PlugIn.find("com.KaitlinSalzke.DependencyForOmniFocus")
+			.library("dependencyConfig")
+			.dependantTag();
+	};
+
 	dependencyLibrary.checkDependants = task => {
-		dependantTag = tagNamed("Activity Type")
-			.tagNamed("⏳ Waiting")
-			.tagNamed("🔒 Other task");
+		dependantTag = dependencyLibrary.dependantTag();
 
 		//get task ID of selected task
 		var prerequisiteTaskId = task.id.primaryKey;
@@ -34,9 +38,11 @@ var _ = (function() {
 				};
 				regexForNoteSearch = new RegExp(RegExp.quote(regexString));
 				dependantTask.note = dependantTask.note.replace(regexForNoteSearch, "");
-				// check whether any remaining prerequisite tasks listed in the note (i.e. whether all prerequisites completed) - and if so
+				// check whether any remaining prerequisite tasks listed in the note
+				// (i.e. whether all prerequisites completed) - and if so
 				if (!/\[PREREQUISITE:/.test(dependantTask.note)) {
-					// if no remaining prerequisites, remove 'Waiting' tag from dependant task (and if project set to Active)
+					// if no remaining prerequisites, remove 'Waiting' tag from dependant task
+					// (and if project set to Active)
 					dependantTask.removeTag(dependantTag);
 					if (dependantTask.project !== null) {
 						dependantTask.project.status = Project.Status.Active;
