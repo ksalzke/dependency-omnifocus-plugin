@@ -46,6 +46,37 @@ var _ = (function() {
 		}
 	};
 
+	dependencyLibrary.getParent = task => {
+		parent = null;
+		if (task.containingProject == null) {
+			project = inbox;
+		} else {
+			project = task.containingProject.task;
+		}
+		project.apply(item => {
+			if (item.children.includes(task)) {
+				parent = item;
+				return ApplyResult.Stop;
+			}
+		});
+		return parent;
+	};
+
+	dependencyLibrary.checkDependantsForTaskAndAncestors = task => {
+		// get list of all "parent" tasks (up to project level)
+		listOfTasks = [task];
+		parent = getParent(task);
+		while (parent !== null) {
+			listOfTasks.push(parent);
+			parent = getParent(parent);
+		}
+
+		// check this task, and any parent tasks, for dependants
+		listOfTasks.forEach(task => {
+			dependencyLibrary.checkDependants(task);
+		});
+	};
+
 	return dependencyLibrary;
 })();
 _;
