@@ -9,28 +9,28 @@
 	"shortLabel": "Complete For Prerequisite"
 }*/
 var _ = (function() {
-  var action = new PlugIn.Action(function(selection, sender) {
+	var action = new PlugIn.Action(function(selection, sender) {
+		// if called externally (from script) generate selection object
+		if (typeof selection == "undefined") {
+			selection = document.windows[0].selection;
+		}
 
-    // if called externally (from script) generate selection object
-    if (typeof selection == "undefined") {
-      selection = document.windows[0].selection;
-    }
+		task = selection.tasks[0] || selection.projects[0].task;
 
-    task = selection.tasks[0] || selection.projects[0].task;
+		task.markComplete();
 
-    task.markComplete();
+		this.dependencyLibrary.checkDependants(task);
+	});
 
-    this.dependencyLibrary.checkDependants(task);
+	action.validate = function(selection, sender) {
+		return (
+			(selection.tasks.length === 1 &&
+				selection.tasks[0].tags.includes(tagNamed("🔑"))) ||
+			(selection.projects.length === 1 &&
+				selection.projects[0].task.tags.includes(tagNamed("🔑")))
+		);
+	};
 
-  });
-
-  action.validate = function(selection, sender) {
-    return (
-      (selection.tasks.length === 1 &&
-      selection.tasks[0].tags.includes(tagNamed("🔑"))) || (selection.projects.length === 1 && selection.projects[0].task.tags.includes(tagNamed("🔑")))
-    );
-  };
-
-  return action;
+	return action;
 })();
 _;
