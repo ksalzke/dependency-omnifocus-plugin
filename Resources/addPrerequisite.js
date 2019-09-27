@@ -11,39 +11,42 @@ var _ = (function() {
 
 		// GET PREREQUISITE
 		// get all tasks tagged with 'prerequisite'
-		prereqTask = markerTag.tasks[0];
-		prereqTaskId = prereqTask.id.primaryKey;
+		prereqTasks = markerTag.tasks;
 
-		// DEAL WITH SELECTED (DEPENDENT) NOTE
-		task.addTag(dependantTag); // add waiting tag to selected note
-		task.note =
-			"[PREREQUISITE: omnifocus:///task/" +
-			prereqTaskId +
-			"] " +
-			prereqTask.name +
-			"\n\n" +
-			task.note; // prepend prerequisite details to selected note
+		prereqTasks.forEach(prereqTask => {
+			prereqTaskId = prereqTask.id.primaryKey;
 
-		if (task.project !== null) {
-			task.project.status = Project.Status.OnHold;
-		}
+			// DEAL WITH SELECTED (DEPENDENT) NOTE
+			task.addTag(dependantTag); // add waiting tag to selected note
+			task.note =
+				"[PREREQUISITE: omnifocus:///task/" +
+				prereqTaskId +
+				"] " +
+				prereqTask.name +
+				"\n\n" +
+				task.note; // prepend prerequisite details to selected note
 
-		// DEAL WITH PREREQUISITE TASK
-		prereqTask.addTag(prerequisiteTag); // add tag to prerequisite
-		prereqTask.note =
-			"[DEPENDANT: omnifocus:///task/" +
-			task.id.primaryKey +
-			"] " +
-			task.name +
-			"\n\n" +
-			prereqTask.note; // prepend dependant details to prerequisite note
-		prereqTask.removeTag(markerTag); // remove marker tag used for processing;
+			if (task.project !== null) {
+				task.project.status = Project.Status.OnHold;
+			}
+
+			// DEAL WITH PREREQUISITE TASK
+			prereqTask.addTag(prerequisiteTag); // add tag to prerequisite
+			prereqTask.note =
+				"[DEPENDANT: omnifocus:///task/" +
+				task.id.primaryKey +
+				"] " +
+				task.name +
+				"\n\n" +
+				prereqTask.note; // prepend dependant details to prerequisite note
+			prereqTask.removeTag(markerTag); // remove marker tag used for processing;
+		});
 	});
 
 	action.validate = function(selection, sender) {
 		return (
 			(selection.tasks.length === 1 || selection.projects.length == 1) &&
-			this.dependencyConfig.markerTag().tasks.length == 1
+			this.dependencyConfig.markerTag().tasks.length >= 1
 		);
 	};
 
