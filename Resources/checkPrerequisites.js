@@ -1,49 +1,49 @@
 var _ = (function() {
-	var action = new PlugIn.Action(function(selection, sender) {
-		// config
-		config = this.dependencyConfig;
-		dependantTag = config.dependantTag();
-		prerequisiteTag = config.prerequisiteTag();
+  var action = new PlugIn.Action(function(selection, sender) {
+    // config
+    config = this.dependencyConfig;
+    dependantTag = config.dependantTag();
+    prerequisiteTag = config.prerequisiteTag();
 
-		dependencyLibrary = this.dependencyLibrary;
+    dependencyLibrary = this.dependencyLibrary;
 
-		// get all remaining tasks that are waiting on prerequisites
-		remainingTasks = [];
-		dependantTag.tasks.forEach(function(task) {
-			if (task.taskStatus === Task.Status.Blocked) {
-				remainingTasks.push(task);
-			}
-		});
+    // get all remaining tasks that are waiting on prerequisites
+    remainingTasks = [];
+    dependantTag.tasks.forEach(function(task) {
+      if (task.taskStatus === Task.Status.Blocked) {
+        remainingTasks.push(task);
+      }
+    });
 
-		// for each task that is waiting:
-		remainingTasks.forEach(function(dependentTask) {
-			// use regex to find [PREREQUISITE: taskid] matches in the notes and capture task IDs
-			regex = /\[PREREQUISITE: omnifocus:\/\/\/task\/(.+)\]/g;
-			var regexArray = [];
-			prerequisiteTasksArray = [];
-			while ((regexArray = regex.exec(dependentTask.note)) !== null) {
-				// for each captured task ID
-				prerequisiteTaskId = regexArray[1];
-				// get the task with that ID and push to array
-				prerequisiteTag.tasks.forEach(function(task) {
-					if (task.id.primaryKey == prerequisiteTaskId) {
-						prerequisiteTasksArray.push(task);
-						return ApplyResult.Stop;
-					}
-				});
-			}
+    // for each task that is waiting:
+    remainingTasks.forEach(function(dependentTask) {
+      // use regex to find [PREREQUISITE: taskid] matches in the notes and capture task IDs
+      regex = /\[ ?PREREQUISITE: omnifocus:\/\/\/task\/(.*?) ?\]/g;
+      var regexArray = [];
+      prerequisiteTasksArray = [];
+      while ((regexArray = regex.exec(dependentTask.note)) !== null) {
+        // for each captured task ID
+        prerequisiteTaskId = regexArray[1];
+        // get the task with that ID and push to array
+        prerequisiteTag.tasks.forEach(function(task) {
+          if (task.id.primaryKey == prerequisiteTaskId) {
+            prerequisiteTasksArray.push(task);
+            return ApplyResult.Stop;
+          }
+        });
+      }
 
-			// or each prerequsite task that has been captured
-			prerequisiteTasksArray.forEach(prerequisiteTask => {
-				dependencyLibrary.checkDependants(prerequisiteTask);
-			});
-		});
-	});
+      // or each prerequsite task that has been captured
+      prerequisiteTasksArray.forEach(prerequisiteTask => {
+        dependencyLibrary.checkDependants(prerequisiteTask);
+      });
+    });
+  });
 
-	action.validate = function(selection, sender) {
-		return true;
-	};
+  action.validate = function(selection, sender) {
+    return true;
+  };
 
-	return action;
+  return action;
 })();
 _;
