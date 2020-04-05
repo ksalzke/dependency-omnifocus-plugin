@@ -1,13 +1,13 @@
-var _ = (function() {
+(() => {
   var dependencyLibrary = new PlugIn.Library(new Version("1.0"));
 
-  dependencyLibrary.dependantTag = function() {
+  dependencyLibrary.dependantTag = function () {
     return PlugIn.find("com.KaitlinSalzke.DependencyForOmniFocus")
       .library("dependencyConfig")
       .dependantTag();
   };
 
-  dependencyLibrary.checkDependants = task => {
+  dependencyLibrary.checkDependants = (task) => {
     dependantTag = dependencyLibrary.dependantTag();
 
     //get task ID of selected task
@@ -23,7 +23,7 @@ var _ = (function() {
         dependantTaskId = regexArray[1];
         // get the task with that ID
         var dependantTask = null;
-        dependantTag.tasks.forEach(function(task) {
+        dependantTag.tasks.forEach(function (task) {
           if (task.id.primaryKey == dependantTaskId) {
             dependantTask = task;
             return ApplyResult.Stop;
@@ -33,7 +33,7 @@ var _ = (function() {
         // remove the prerequisite tag from the dependant task
         regexString =
           "[ ?PREREQUISITE: omnifocus:///task/" + prerequisiteTaskId + " ?].+";
-        RegExp.quote = function(str) {
+        RegExp.quote = function (str) {
           return str.replace(/([*^$[\]\\(){}|-])/g, "\\$1");
         };
         regexForNoteSearch = new RegExp(RegExp.quote(regexString));
@@ -52,14 +52,14 @@ var _ = (function() {
     }
   };
 
-  dependencyLibrary.getParent = task => {
+  dependencyLibrary.getParent = (task) => {
     parent = null;
     if (task.containingProject == null) {
       project = inbox;
     } else {
       project = task.containingProject.task;
     }
-    project.apply(item => {
+    project.apply((item) => {
       if (item.children.includes(task)) {
         parent = item;
         return ApplyResult.Stop;
@@ -68,7 +68,7 @@ var _ = (function() {
     return parent;
   };
 
-  dependencyLibrary.checkDependantsForTaskAndAncestors = task => {
+  dependencyLibrary.checkDependantsForTaskAndAncestors = (task) => {
     // get list of all "parent" tasks (up to project level)
     listOfTasks = [task];
     parent = dependencyLibrary.getParent(task);
@@ -78,11 +78,10 @@ var _ = (function() {
     }
 
     // check this task, and any parent tasks, for dependants
-    listOfTasks.forEach(task => {
+    listOfTasks.forEach((task) => {
       dependencyLibrary.checkDependants(task);
     });
   };
 
   return dependencyLibrary;
 })();
-_;

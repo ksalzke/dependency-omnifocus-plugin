@@ -1,5 +1,5 @@
-var _ = (function() {
-  var action = new PlugIn.Action(function(selection, sender) {
+(() => {
+  var action = new PlugIn.Action(function (selection, sender) {
     config = this.dependencyConfig;
 
     // configure tags
@@ -13,7 +13,7 @@ var _ = (function() {
     // get all tasks tagged with 'prerequisite'
     prereqTasks = markerTag.tasks;
 
-    prereqTasks.forEach(prereqTask => {
+    prereqTasks.forEach((prereqTask) => {
       prereqTaskId = prereqTask.id.primaryKey;
 
       // DEAL WITH SELECTED (DEPENDENT) NOTE
@@ -43,7 +43,7 @@ var _ = (function() {
     });
   });
 
-  action.validate = function(selection, sender) {
+  action.validate = function (selection, sender) {
     return (
       (selection.tasks.length === 1 || selection.projects.length == 1) &&
       this.dependencyConfig.markerTag().tasks.length >= 1
@@ -52,4 +52,3 @@ var _ = (function() {
 
   return action;
 })();
-_;
