@@ -1,26 +1,27 @@
 {
-	"defaultLocale": "en",
-	"identifier": "com.KaitlinSalzke.DependencyForOmniFocus",
-	"author": "Kaitlin Salzke",
-	"description": "An OmniFocus plugin that enables task dependency outside of the built-in sequential action group structure",
-	"version": "2.0",
-	"actions": [
-		{
-			"identifier": "addPrerequisite"
-		},
-		{
-			"identifier": "checkPrerequisites"
-		},
-		{
-			"identifier": "completeForPrerequisite"
-		}
-	],
-	"libraries": [
-		{
-			"identifier": "dependencyLibrary"
-		},
-		{
-			"identifier": "dependencyConfig"
-		}
-	]
+  "defaultLocale": "en",
+  "identifier": "com.KaitlinSalzke.DependencyForOmniFocus",
+  "author": "Kaitlin Salzke",
+  "description": "An OmniFocus plugin that enables task dependency outside of the built-in sequential action group structure",
+  "version": "2.0",
+  "actions": [
+    {
+      "identifier": "addPrerequisite"
+    },
+    {
+      "identifier": "checkPrerequisites"
+    },
+    {
+      "identifier": "completeForPrerequisite"
+    },
+    { "identifier": "makePrerequisite" }
+  ],
+  "libraries": [
+    {
+      "identifier": "dependencyLibrary"
+    },
+    {
+      "identifier": "dependencyConfig"
+    }
+  ]
 }
