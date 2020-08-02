@@ -7,6 +7,29 @@
       .dependantTag();
   };
 
+  dependencyLibrary.getDependants = (task) => {
+    dependantTag = dependencyLibrary.dependantTag();
+
+    dependantTasks = [];
+
+    // use regex to find [DEPENDANT: taskid] matches in the notes and capture task IDs
+    regex = /\[ ?DEPENDANT: omnifocus:\/\/\/task\/(.*?) ?\]/g;
+    var regexArray = [];
+    while ((regexArray = regex.exec(task.note)) !== null) {
+      // for each captured task ID
+      dependantTaskId = regexArray[1];
+      // get the task with that ID
+      var dependantTask = null;
+      dependantTag.tasks.forEach(function (task) {
+        if (task.id.primaryKey == dependantTaskId) {
+          dependantTasks.push(task);
+          return ApplyResult.Stop;
+        }
+      });
+    }
+    return dependantTasks;
+  };
+
   dependencyLibrary.checkDependants = (task) => {
     dependantTag = dependencyLibrary.dependantTag();
 
@@ -14,22 +37,11 @@
     var prerequisiteTaskId = task.id.primaryKey;
     var prerequisiteTask = task;
 
-    if (prerequisiteTask.completed) {
-      // use regex to find [DEPENDANT: taskid] matches in the notes and capture task IDs
-      regex = /\[ ?DEPENDANT: omnifocus:\/\/\/task\/(.*?) ?\]/g;
-      var regexArray = [];
-      while ((regexArray = regex.exec(prerequisiteTask.note)) !== null) {
-        // for each captured task ID
-        dependantTaskId = regexArray[1];
-        // get the task with that ID
-        var dependantTask = null;
-        dependantTag.tasks.forEach(function (task) {
-          if (task.id.primaryKey == dependantTaskId) {
-            dependantTask = task;
-            return ApplyResult.Stop;
-          }
-        });
+    //get array of dependant tasks
+    dependantTasks = dependencyLibrary.getDependants(task);
 
+    dependantTasks.forEach((dependantTask) => {
+      if (prerequisiteTask.completed) {
         // remove the prerequisite tag from the dependant task
         regexString =
           "[ ?PREREQUISITE: omnifocus:///task/" + prerequisiteTaskId + " ?].+";
@@ -49,7 +61,7 @@
           }
         }
       }
-    }
+    });
   };
 
   dependencyLibrary.getParent = (task) => {
