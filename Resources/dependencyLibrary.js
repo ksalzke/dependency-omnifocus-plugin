@@ -52,29 +52,17 @@
     }
   };
 
-  dependencyLibrary.getParent = (task) => {
-    parent = null;
-    if (task.containingProject == null) {
-      project = inbox;
-    } else {
-      project = task.containingProject.task;
-    }
-    project.apply((item) => {
-      if (item.children.includes(task)) {
-        parent = item;
-        return ApplyResult.Stop;
-      }
-    });
-    return parent;
-  };
-
   dependencyLibrary.checkDependantsForTaskAndAncestors = (task) => {
+    functionLib = PlugIn.find("com.KaitlinSalzke.functionLibrary").library(
+      "functionLibrary"
+    );
+
     // get list of all "parent" tasks (up to project level)
     listOfTasks = [task];
-    parent = dependencyLibrary.getParent(task);
+    parent = functionLib.getParent(task);
     while (parent !== null) {
       listOfTasks.push(parent);
-      parent = dependencyLibrary.getParent(parent);
+      parent = functionLib.getParent(parent);
     }
 
     // check this task, and any parent tasks, for dependants
