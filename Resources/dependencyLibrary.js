@@ -62,60 +62,63 @@
   dependencyLibrary.checkDependants = (task) => {
     dependantTag = dependencyLibrary.dependantTag();
 
-    //get task ID of selected task
-    var prerequisiteTaskId = task.id.primaryKey;
     var prerequisiteTask = task;
 
     //get array of dependant tasks
     dependantTasks = dependencyLibrary.getDependants(task);
 
-    dependantTasks.forEach((dependantTask) => {
-      if (prerequisiteTask.completed) {
-        // remove the prerequisite tag from the dependant task
-        regexString =
-          "[ ?PREREQUISITE: omnifocus:///task/" + prerequisiteTaskId + " ?].+";
-        RegExp.quote = function (str) {
-          return str.replace(/([*^$[\]\\(){}|-])/g, "\\$1");
-        };
-        regexForNoteSearch = new RegExp(RegExp.quote(regexString));
-        dependantTask.note = dependantTask.note.replace(regexForNoteSearch, "");
-        // check whether any remaining prerequisite tasks listed in the note
-        // (i.e. whether all prerequisites completed) - and if so
-        if (!/\[ ?PREREQUISITE:/.test(dependantTask.note)) {
-          // if no remaining prerequisites, remove 'Waiting' tag from dependant task
-          // (and if project set to Active)
-          dependantTask.removeTag(dependantTag);
-          if (dependantTask.project !== null) {
-            dependantTask.project.status = Project.Status.Active;
-          }
+    function removeDependant(dependant, prerequisiteTask) {
+      //get task ID of selected task
+      prerequisiteTaskId = prerequisiteTask.id.primaryKey;
+      // remove the prerequisite tag from the dependant task
+      regexString =
+        "[ ?PREREQUISITE: omnifocus:///task/" + prerequisiteTaskId + " ?].+";
+      RegExp.quote = function (str) {
+        return str.replace(/([*^$[\]\\(){}|-])/g, "\\$1");
+      };
+      regexForNoteSearch = new RegExp(RegExp.quote(regexString));
+      dependant.note = dependant.note.replace(regexForNoteSearch, "");
+      // check whether any remaining prerequisite tasks listed in the note
+      // (i.e. whether all prerequisites completed) - and if so
+      if (!/\[ ?PREREQUISITE:/.test(dependant.note)) {
+        // if no remaining prerequisites, remove 'Waiting' tag from dependant task
+        // (and if project set to Active)
+        dependant.removeTag(dependantTag);
+        if (dependant.project !== null) {
+          dependant.project.status = Project.Status.Active;
         }
       }
-    });
-  };
 
-  dependencyLibrary.getParent = (task) => {
-    parent = null;
-    if (task.containingProject == null) {
-      project = inbox;
-    } else {
-      project = task.containingProject.task;
+      // if dependant task has children:
+      if (dependant.hasChildren) {
+        if (dependant.sequential) {
+          removeDependant(dependant.children[0], prerequisiteTask);
+        } else {
+          dependant.children.forEach((child) => {
+            removeDependant(child, prerequisiteTask);
+          });
+        }
+      }
     }
-    project.apply((item) => {
-      if (item.children.includes(task)) {
-        parent = item;
-        return ApplyResult.Stop;
+
+    dependantTasks.forEach((dependantTask) => {
+      if (prerequisiteTask.completed) {
+        removeDependant(dependantTask, prerequisiteTask);
       }
     });
-    return parent;
   };
 
   dependencyLibrary.checkDependantsForTaskAndAncestors = (task) => {
+    functionLib = PlugIn.find("com.KaitlinSalzke.functionLibrary").library(
+      "functionLibrary"
+    );
+
     // get list of all "parent" tasks (up to project level)
     listOfTasks = [task];
-    parent = dependencyLibrary.getParent(task);
+    parent = functionLib.getParent(task);
     while (parent !== null) {
       listOfTasks.push(parent);
-      parent = dependencyLibrary.getParent(parent);
+      parent = functionLib.getParent(parent);
     }
 
     // check this task, and any parent tasks, for dependants
