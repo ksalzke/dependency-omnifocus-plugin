@@ -14,7 +14,8 @@
     {
       "identifier": "completeForPrerequisite"
     },
-    { "identifier": "makePrerequisite" }
+    { "identifier": "makePrerequisite" },
+    { "identifier": "updateDueDates" }
   ],
   "libraries": [
     {
