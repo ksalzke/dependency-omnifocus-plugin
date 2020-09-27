@@ -7,6 +7,12 @@
       .dependantTag();
   };
 
+  dependencyLibrary.prereqTag = function () {
+    return PlugIn.find("com.KaitlinSalzke.DependencyForOmniFocus")
+      .library("dependencyConfig")
+      .prerequisiteTag();
+  };
+
   dependencyLibrary.getDependants = (task) => {
     dependantTag = dependencyLibrary.dependantTag();
 
@@ -28,6 +34,29 @@
       });
     }
     return dependantTasks;
+  };
+
+  dependencyLibrary.getPrereqs = (task) => {
+    prereqTag = dependencyLibrary.prereqTag();
+
+    prereqTasks = [];
+
+    // use regex to find [PREREQUISITE: taskid] matches in the notes and capture task IDs
+    regex = /\[ ?PREREQUISITE: omnifocus:\/\/\/task\/(.*?) ?\]/g;
+    var regexArray = [];
+    while ((regexArray = regex.exec(task.note)) !== null) {
+      // for each captured task ID
+      prereqID = regexArray[1];
+      // get the task with that ID
+      var prereqTask = null;
+      prereqTag.tasks.forEach(function (task) {
+        if (task.id.primaryKey == prereqTaskId) {
+          prereqTasks.push(task);
+          return ApplyResult.Stop;
+        }
+      });
+    }
+    return prereqTasks;
   };
 
   dependencyLibrary.checkDependants = (task) => {
