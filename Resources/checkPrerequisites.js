@@ -33,7 +33,7 @@
         });
       }
 
-      // or each prerequsite task that has been captured
+      // for each prerequsite task that has been captured
       prerequisiteTasksArray.forEach((prerequisiteTask) => {
         dependencyLibrary.checkDependants(prerequisiteTask);
       });
