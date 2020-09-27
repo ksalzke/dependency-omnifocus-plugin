@@ -10,8 +10,6 @@
   dependencyLibrary.checkDependants = (task) => {
     dependantTag = dependencyLibrary.dependantTag();
 
-    //get task ID of selected task
-    var prerequisiteTaskId = task.id.primaryKey;
     var prerequisiteTask = task;
 
     if (prerequisiteTask.completed) {
@@ -30,24 +28,43 @@
           }
         });
 
-        // remove the prerequisite tag from the dependant task
-        regexString =
-          "[ ?PREREQUISITE: omnifocus:///task/" + prerequisiteTaskId + " ?].+";
-        RegExp.quote = function (str) {
-          return str.replace(/([*^$[\]\\(){}|-])/g, "\\$1");
-        };
-        regexForNoteSearch = new RegExp(RegExp.quote(regexString));
-        dependantTask.note = dependantTask.note.replace(regexForNoteSearch, "");
-        // check whether any remaining prerequisite tasks listed in the note
-        // (i.e. whether all prerequisites completed) - and if so
-        if (!/\[ ?PREREQUISITE:/.test(dependantTask.note)) {
-          // if no remaining prerequisites, remove 'Waiting' tag from dependant task
-          // (and if project set to Active)
-          dependantTask.removeTag(dependantTag);
-          if (dependantTask.project !== null) {
-            dependantTask.project.status = Project.Status.Active;
+        function removeDependant(dependant, prerequisiteTask) {
+          //get task ID of selected task
+          prerequisiteTaskId = prerequisiteTask.id.primaryKey;
+          // remove the prerequisite tag from the dependant task
+          regexString =
+            "[ ?PREREQUISITE: omnifocus:///task/" +
+            prerequisiteTaskId +
+            " ?].+";
+          RegExp.quote = function (str) {
+            return str.replace(/([*^$[\]\\(){}|-])/g, "\\$1");
+          };
+          regexForNoteSearch = new RegExp(RegExp.quote(regexString));
+          dependant.note = dependant.note.replace(regexForNoteSearch, "");
+          // check whether any remaining prerequisite tasks listed in the note
+          // (i.e. whether all prerequisites completed) - and if so
+          if (!/\[ ?PREREQUISITE:/.test(dependant.note)) {
+            // if no remaining prerequisites, remove 'Waiting' tag from dependant task
+            // (and if project set to Active)
+            dependant.removeTag(dependantTag);
+            if (dependant.project !== null) {
+              dependant.project.status = Project.Status.Active;
+            }
+          }
+
+          // if dependant task has children:
+          if (dependant.hasChildren) {
+            if (dependant.sequential) {
+              removeDependant(dependant.children[0], prerequisiteTask);
+            } else {
+              dependant.children.forEach((child) => {
+                removeDependant(child, prerequisiteTask);
+              });
+            }
           }
         }
+
+        removeDependant(dependantTask, prerequisiteTask);
       }
     }
   };
