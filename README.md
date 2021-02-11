@@ -37,9 +37,9 @@ This action can be run when one or more tasks are selected. It is simply a helpe
 
 ## Add Prerequisite
 
-This action can be run when one or more tasks have the marker tag and a single task or project is selected. It:
+This action can be run when one or more tasks have the marker tag and one or more tasks or projects are selected. It:
 
-1. For the selected (dependant) task/project:
+1. For the selected (dependant) tasks/projects:
     * Adds the dependant tag
     * Prepends link(s) to the prerequisite tasks in its note in the form `[ PREREQUISITE: omnifocus:///task/<id> ]`
     * If the selection is a project, changes its status to `On Hold`

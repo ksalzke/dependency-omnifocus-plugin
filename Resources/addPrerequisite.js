@@ -7,7 +7,10 @@
     prerequisiteTag = config.prerequisiteTag();
     dependantTag = config.dependantTag();
 
-    dependantTask = selection.tasks[0] || selection.projects[0].task;
+    dependantTasks = selection.tasks;
+    selection.projects.forEach(project => {
+      dependantTasks.push(project.task);
+    })
 
     function makeDependant(dep, prereq) {
       pId = prereq.id.primaryKey;
@@ -41,7 +44,8 @@
     prereqTasks = markerTag.tasks;
 
     prereqTasks.forEach((prereqTask) => {
-      // DEAL WITH SELECTED (DEPENDENT) NOTE
+      dependantTasks.forEach((dependantTask => {
+        // DEAL WITH SELECTED (DEPENDENT) NOTE
       makeDependant(dependantTask, prereqTask);
 
       // DEAL WITH PREREQUISITE TASK
@@ -53,13 +57,15 @@
         dependantTask.name +
         "\n\n" +
         prereqTask.note; // prepend dependant details to prerequisite note
+      }))
+      
       prereqTask.removeTag(markerTag); // remove marker tag used for processing;
     });
   });
 
   action.validate = function (selection, sender) {
     return (
-      (selection.tasks.length === 1 || selection.projects.length == 1) &&
+      (selection.tasks.length > 0 || selection.projects.length > 0) &&
       this.dependencyConfig.markerTag().tasks.length >= 1
     );
   };
