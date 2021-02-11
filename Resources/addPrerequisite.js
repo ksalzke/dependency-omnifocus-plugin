@@ -7,30 +7,30 @@
     prerequisiteTag = config.prerequisiteTag();
     dependantTag = config.dependantTag();
 
-    task = selection.tasks[0] || selection.projects[0].task;
+    dependantTask = selection.tasks[0] || selection.projects[0].task;
 
-    function makeDependant(task, prereqTask) {
-      prereqTaskId = prereqTask.id.primaryKey;
-      task.addTag(dependantTag); // add waiting tag to selected note
-      task.note =
+    function makeDependant(dep, prereq) {
+      pId = prereq.id.primaryKey;
+      dep.addTag(dependantTag); // add waiting tag to selected note
+      dep.note =
         "[ PREREQUISITE: omnifocus:///task/" +
-        prereqTaskId +
+        pId +
         " ] " +
-        prereqTask.name +
+        prereq.name +
         "\n\n" +
-        task.note; // prepend prerequisite details to selected note
+        dep.note; // prepend prerequisite details to selected note
 
-      if (task.project !== null) {
-        task.project.status = Project.Status.OnHold;
+      if (dep.project !== null) {
+        dep.project.status = Project.Status.OnHold;
       }
 
       // if dependant task has children:
-      if (task.hasChildren) {
-        if (task.sequential) {
-          makeDependant(task.children[0], prereqTask);
+      if (dep.hasChildren) {
+        if (dep.sequential) {
+          makeDependant(dep.children[0], prereq);
         } else {
-          task.children.forEach((child) => {
-            makeDependant(child, prereqTask);
+          dep.children.forEach((child) => {
+            makeDependant(child, prereq);
           });
         }
       }
@@ -42,15 +42,15 @@
 
     prereqTasks.forEach((prereqTask) => {
       // DEAL WITH SELECTED (DEPENDENT) NOTE
-      makeDependant(task, prereqTask);
+      makeDependant(dependantTask, prereqTask);
 
       // DEAL WITH PREREQUISITE TASK
       prereqTask.addTag(prerequisiteTag); // add tag to prerequisite
       prereqTask.note =
         "[ DEPENDANT: omnifocus:///task/" +
-        task.id.primaryKey +
+        dependantTask.id.primaryKey +
         " ] " +
-        task.name +
+        dependantTask.name +
         "\n\n" +
         prereqTask.note; // prepend dependant details to prerequisite note
       prereqTask.removeTag(markerTag); // remove marker tag used for processing;
