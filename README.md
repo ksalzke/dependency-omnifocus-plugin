@@ -17,6 +17,7 @@ None so far! 🤞
 3. Open the configuration file located at `Resources/dependencyConfig.js` and make any changes needed to reflect your OmniFocus set-up. Further explanations of the options are included within that file as comments.
 4. Rename the entire folder to anything you like, with the extension `.omnifocusjs`
 5. Move the resulting file to your OmniFocus plug-in library folder.
+6. Manually create the three tags below in OmniFocus.
 
 The plugin makes use of three tags:
 
