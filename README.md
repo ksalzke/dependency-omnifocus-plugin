@@ -57,9 +57,25 @@ This action can be run when no tasks or projects are selected.
 
 It gets all remaining dependant tasks. For each one, it checks all of the task's prerequisites using the `checkDependants` function (see below); if all prerequisites have been completed this function makes the dependant task available.
 
+## Update Due Dates
+
+This action can be run when no tasks or projects are selected.
+
+For each task tagged as a prerequisite, it finds the earliest effective due date of its dependent tasks (including tasks that are indirectly dependent, i.e. a task that is dependent on the original task's dependant, and so on)
+
+It then updates the due dates on the prerequisite task, and any sequential actions that preceed it, to match the earliest due date.
+
 # Functions
 
 This plugin contains the following functions within the `dependencyLibrary` library:
+
+## getDependants
+
+This function takes a task object as input, and returns an array of its (direct) dependent tasks. If it has no dependent tasks, it returns an empty array.
+
+## getPrereqs
+
+This function takes a task object as input, and returns an array of its (direct) prerequisite tasks. If it has no prerequisite tasks, it returns an empty array.
 
 ## checkDependants
 
