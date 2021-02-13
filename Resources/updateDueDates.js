@@ -16,19 +16,27 @@
       // find earliest due date
       let earliestDue = null
       dependentTasks.forEach((dep) => {
-        console.log(dep)
-        console.log(dep.effectiveDueDate + ' ')
         if (dep.effectiveDueDate < earliestDue || earliestDue == null) {
           earliestDue = dep.effectiveDueDate
         }
       })
 
-      // if earlier than task's current effective due date, use earlier date
       if (
         (earliestDue < task.effectiveDueDate && earliestDue !== null) ||
         task.effectiveDueDate == null
       ) {
+        // if earlier than task's current effective due date, use earlier date
         task.dueDate = earliestDue
+        // if prerequisite task is part of a sequential action group/project, also update due date of preceding actions
+        if (task.parent !== null && task.parent.sequential) {
+          const siblings = task.parent.children
+          for (let i = 0; i < siblings.length; i++) {
+            const sibling = siblings[i]
+            if (sibling !== task) {
+              sibling.dueDate = earliestDue
+            } else break
+          }
+        }
       }
     })
   })
