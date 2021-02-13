@@ -1,5 +1,6 @@
+/* global PlugIn Version tagNamed */
 (() => {
-  var dependencyConfig = new PlugIn.Library(new Version("1.0"));
+  const dependencyConfig = new PlugIn.Library(new Version('1.0'))
 
   dependencyConfig.markerTag = function () {
     // edit the below line to configure the tag used to mark a task
@@ -19,5 +20,5 @@
     return tagsMatching("🔒")[0];
   };
 
-  return dependencyConfig;
-})();
+  return dependencyConfig
+})()

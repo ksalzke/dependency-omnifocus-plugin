@@ -1,22 +1,23 @@
+/* global PlugIn */
 (() => {
-  var action = new PlugIn.Action(function (selection, sender) {
+  const action = new PlugIn.Action(function (selection, sender) {
     // if called externally (from script) generate selection object
-    if (typeof selection == "undefined") {
-      selection = document.windows[0].selection;
+    if (typeof selection === 'undefined') {
+      selection = document.windows[0].selection
     }
 
-    task = selection.tasks[0] || selection.projects[0].task;
+    const task = selection.tasks[0] || selection.projects[0].task
 
     // mark the task as complete
-    task.markComplete();
+    task.markComplete()
 
     // check dependants
-    this.dependencyLibrary.checkDependantsForTaskAndAncestors(task);
-  });
+    this.dependencyLibrary.checkDependantsForTaskAndAncestors(task)
+  })
 
   action.validate = function (selection, sender) {
-    return selection.tasks.length === 1 || selection.projects.length === 1;
-  };
+    return selection.tasks.length === 1 || selection.projects.length === 1
+  }
 
-  return action;
-})();
+  return action
+})()
