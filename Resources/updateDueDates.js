@@ -10,10 +10,20 @@
     prereqTag.remainingTasks.forEach((task) => {
       // for each remaining task tagged as a prerequisite...
 
-      // get dependant tasks
-      const dependentTasks = dependencyLibrary.getDependants(task)
+      // recursively get directly dependant tasks (and tasks dependent on those tasks, etc)
+      const dependentTasks = []
+      const allDeps = preReq => {
+        const depTasks = dependencyLibrary.getDependants(preReq)
+        depTasks.forEach(dep => {
+          dependentTasks.push(dep)
+          if (dep.tags.includes(prereqTag)) {
+            allDeps(dep)
+          }
+        })
+      }
+      allDeps(task)
 
-      // find earliest due date
+      // find earliest due date of dependent tasks
       let earliestDue = null
       dependentTasks.forEach((dep) => {
         if (dep.effectiveDueDate < earliestDue || earliestDue == null) {
