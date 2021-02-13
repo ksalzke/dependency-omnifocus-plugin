@@ -8,30 +8,33 @@
     const prerequisiteTag = config.prerequisiteTag()
     const dependantTag = config.dependantTag()
 
-    const task = selection.tasks[0] || selection.projects[0].task
+    const dependantTasks = selection.tasks
+    selection.projects.forEach(project => {
+      dependantTasks.push(project.task)
+    })
 
-    function makeDependant (task, prereqTask) {
-      const prereqTaskId = prereqTask.id.primaryKey
-      task.addTag(dependantTag) // add waiting tag to selected note
-      task.note =
+    function makeDependant (dep, prereq) {
+      const pId = prereq.id.primaryKey
+      dep.addTag(dependantTag) // add waiting tag to selected note
+      dep.note =
         '[ PREREQUISITE: omnifocus:///task/' +
-        prereqTaskId +
+        pId +
         ' ] ' +
-        prereqTask.name +
+        prereq.name +
         '\n\n' +
-        task.note // prepend prerequisite details to selected note
+        dep.note // prepend prerequisite details to selected note
 
-      if (task.project !== null) {
-        task.project.status = Project.Status.OnHold
+      if (dep.project !== null) {
+        dep.project.status = Project.Status.OnHold
       }
 
       // if dependant task has children:
-      if (task.hasChildren) {
-        if (task.sequential) {
-          makeDependant(task.children[0], prereqTask)
+      if (dep.hasChildren) {
+        if (dep.sequential) {
+          makeDependant(dep.children[0], prereq)
         } else {
-          task.children.forEach((child) => {
-            makeDependant(child, prereqTask)
+          dep.children.forEach((child) => {
+            makeDependant(child, prereq)
           })
         }
       }
@@ -42,25 +45,27 @@
     const prereqTasks = markerTag.tasks
 
     prereqTasks.forEach((prereqTask) => {
-      // DEAL WITH SELECTED (DEPENDENT) NOTE
-      makeDependant(task, prereqTask)
+      dependantTasks.forEach(dependantTask => {
+        // DEAL WITH SELECTED (DEPENDENT) NOTE
+        makeDependant(dependantTask, prereqTask)
 
-      // DEAL WITH PREREQUISITE TASK
-      prereqTask.addTag(prerequisiteTag) // add tag to prerequisite
-      prereqTask.note =
-        '[ DEPENDANT: omnifocus:///task/' +
-        task.id.primaryKey +
-        ' ] ' +
-        task.name +
-        '\n\n' +
-        prereqTask.note // prepend dependant details to prerequisite note
+        // DEAL WITH PREREQUISITE TASK
+        prereqTask.addTag(prerequisiteTag) // add tag to prerequisite
+        prereqTask.note =
+          '[ DEPENDANT: omnifocus:///task/' +
+          dependantTask.id.primaryKey +
+          ' ] ' +
+          dependantTask.name +
+          '\n\n' +
+          prereqTask.note // prepend dependant details to prerequisite note
+      })
       prereqTask.removeTag(markerTag) // remove marker tag used for processing;
     })
   })
 
   action.validate = function (selection, sender) {
     return (
-      (selection.tasks.length === 1 || selection.projects.length === 1) &&
+      (selection.tasks.length > 0 || selection.projects.length > 0) &&
       this.dependencyConfig.markerTag().tasks.length >= 1
     )
   }

@@ -10,11 +10,14 @@ None so far! 🤞
 
 # Installation & Set-Up
 
+**Important note: for this plug-in bundle to work correctly, my [Function Library for OmniFocus](https://github.com/ksalzke/function-library-for-omnifocus) is also required and needs to be added to the plug-in folder separately.**
+
 1. Click on the green `Clone or download` button above to download a `.zip` file of all the files in this GitHub repository.
 2. Unzip the downloaded file.
 3. Open the configuration file located at `Resources/dependencyConfig.js` and make any changes needed to reflect your OmniFocus set-up. Further explanations of the options are included within that file as comments.
 4. Rename the entire folder to anything you like, with the extension `.omnifocusjs`
 5. Move the resulting file to your OmniFocus plug-in library folder.
+6. Manually create the three tags below in OmniFocus.
 
 The plugin makes use of three tags:
 
@@ -34,9 +37,9 @@ This action can be run when one or more tasks are selected. It is simply a helpe
 
 ## Add Prerequisite
 
-This action can be run when one or more tasks have the marker tag and a single task or project is selected. It:
+This action can be run when one or more tasks have the marker tag and one or more tasks or projects are selected. It:
 
-1. For the selected (dependant) task/project:
+1. For the selected (dependant) tasks/projects:
     * Adds the dependant tag
     * Prepends link(s) to the prerequisite tasks in its note in the form `[ PREREQUISITE: omnifocus:///task/<id> ]`
     * If the selection is a project, changes its status to `On Hold`
