@@ -26,7 +26,7 @@
       // find earliest due date of dependent tasks
       let earliestDue = null
       dependentTasks.forEach((dep) => {
-        if (dep.effectiveDueDate < earliestDue || earliestDue == null) {
+        if (dep.effectiveDueDate !== null && (dep.effectiveDueDate < earliestDue || earliestDue === null)) {
           earliestDue = dep.effectiveDueDate
         }
       })
