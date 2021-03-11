@@ -32,19 +32,21 @@
       })
 
       if (
-        (earliestDue < task.effectiveDueDate && earliestDue !== null) ||
+        (earliestDue <= task.effectiveDueDate && earliestDue !== null) ||
         task.effectiveDueDate == null
       ) {
         // if earlier than task's current effective due date, use earlier date
-        task.dueDate = earliestDue
+        if (earliestDue < task.effectiveDueDate) {
+          task.dueDate = earliestDue
+        }
         // if prerequisite task is part of a sequential action group/project, also update due date of preceding actions
         if (task.parent !== null && task.parent.sequential) {
           const siblings = task.parent.children
-          for (let i = 0; i < siblings.length; i++) {
+          for (let i = 0; i < siblings.indexOf(task); i++) {
             const sibling = siblings[i]
-            if (sibling !== task) {
+            if (sibling.effectiveDueDate === null || earliestDue < sibling.effectiveDueDate) {
               sibling.dueDate = earliestDue
-            } else break
+            }
           }
         }
       }
