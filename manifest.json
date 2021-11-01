@@ -3,7 +3,7 @@
   "identifier": "com.KaitlinSalzke.DependencyForOmniFocus",
   "author": "Kaitlin Salzke",
   "description": "An OmniFocus plugin that enables task dependency outside of the built-in sequential action group structure",
-  "version": "2.1",
+  "version": "2.2.0",
   "actions": [
     {
       "identifier": "addPrerequisite",
@@ -24,7 +24,7 @@
     {
       "identifier": "updateDueDates",
       "image": "calendar.badge.plus"
-     }
+    }
   ],
   "libraries": [
     {
