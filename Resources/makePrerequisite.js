@@ -9,6 +9,10 @@
     selection.tasks.forEach(function (task) {
       task.addTag(markerTag)
     })
+
+    selection.projects.forEach(function (project) {
+      project.task.addTag(markerTag)
+    })
   })
 
   action.validate = function (selection, sender) {
