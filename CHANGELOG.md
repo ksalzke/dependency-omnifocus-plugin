@@ -1,3 +1,12 @@
+# [2.3.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v2.2.0...v2.3.0) (2021-11-01)
+
+
+### Features
+
+* add ability to tag projects with marker tag ([2239b21](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/2239b21357a31ffca53b609fdc6bc2a15383659c))
+
+
+
 # [2.2.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v2.0.0...v2.2.0) (2021-11-01)
 
 
