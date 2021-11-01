@@ -6,16 +6,25 @@
   "version": "2.1",
   "actions": [
     {
-      "identifier": "addPrerequisite"
+      "identifier": "addPrerequisite",
+      "image": "key.fill"
     },
     {
-      "identifier": "checkPrerequisites"
+      "identifier": "checkPrerequisites",
+      "image": "questionmark.circle"
     },
     {
-      "identifier": "completeForPrerequisite"
+      "identifier": "completeForPrerequisite",
+      "image": "checkmark.square.fill"
     },
-    { "identifier": "makePrerequisite" },
-    { "identifier": "updateDueDates" }
+    {
+      "identifier": "makePrerequisite",
+      "image": "key"
+    },
+    {
+      "identifier": "updateDueDates",
+      "image": "calendar.badge.plus"
+     }
   ],
   "libraries": [
     {
