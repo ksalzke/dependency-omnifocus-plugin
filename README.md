@@ -6,7 +6,7 @@ _Please note that all scripts on my GitHub account (or shared elsewhere) are wor
 
 ## Known issues 
 
-None so far! 🤞
+Refer to the 'issues' in this repo for known issues and planned changes/enhancements.
 
 # Installation & Set-Up
 
@@ -14,10 +14,9 @@ None so far! 🤞
 
 1. Click on the green `Clone or download` button above to download a `.zip` file of all the files in this GitHub repository.
 2. Unzip the downloaded file.
-3. Open the configuration file located at `Resources/dependencyConfig.js` and make any changes needed to reflect your OmniFocus set-up. Further explanations of the options are included within that file as comments.
-4. Rename the entire folder to anything you like, with the extension `.omnifocusjs`
-5. Move the resulting file to your OmniFocus plug-in library folder.
-6. Manually create the three tags below in OmniFocus.
+3. Rename the entire folder to anything you like, with the extension `.omnifocusjs`
+4. Move the resulting file to your OmniFocus plug-in library folder.
+5. Manually create the three tags below in OmniFocus.
 
 The plugin makes use of three tags:
 
