@@ -1,4 +1,4 @@
-/* global PlugIn Version ApplyResult Project Alert Tag Task */
+/* global PlugIn Version Project Alert Tag Task */
 (() => {
   const dependencyLibrary = new PlugIn.Library(new Version('1.0'))
 
@@ -74,25 +74,8 @@
   }
 
   dependencyLibrary.getPrereqs = async (task) => {
-    const prereqTag = await this.dependencyLibrary.getPrefTag('prerequisiteTag')
-
-    const prereqTasks = []
-
-    // use regex to find [PREREQUISITE: taskid] matches in the notes and capture task IDs
-    const regex = /\[ ?PREREQUISITE: omnifocus:\/\/\/task\/(.*?) ?\]/g
-    let regexArray = []
-    while ((regexArray = regex.exec(task.note)) !== null) {
-      // for each captured task ID
-      const prereqTaskId = regexArray[1]
-      // get the task with that ID
-      prereqTag.tasks.forEach(function (task) {
-        if (task.id.primaryKey === prereqTaskId) {
-          prereqTasks.push(task)
-          return ApplyResult.Stop
-        }
-      })
-    }
-    return prereqTasks
+    const links = dependencyLibrary.getLinks()
+    return links.filter(link => link[1] === task.id.primaryKey).map(link => Task.byIdentifier(link[0]))
   }
 
   dependencyLibrary.checkDependants = async (task) => {
