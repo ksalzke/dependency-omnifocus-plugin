@@ -1,12 +1,10 @@
 /* global PlugIn Project */
 (() => {
-  const action = new PlugIn.Action(function (selection, sender) {
-    const config = this.dependencyConfig
-
+  const action = new PlugIn.Action(async function (selection, sender) {
     // configure tags
-    const markerTag = config.markerTag()
-    const prerequisiteTag = config.prerequisiteTag()
-    const dependantTag = config.dependantTag()
+    const markerTag = await this.dependencyLibrary.getPrefTag('markerTag')
+    const prerequisiteTag = await this.dependencyLibrary.getPrefTag('prerequisiteTag')
+    const dependantTag = await this.dependencyLibrary.getPrefTag('dependantTag')
 
     const dependantTasks = selection.tasks
     selection.projects.forEach(project => {
@@ -63,10 +61,16 @@
     })
   })
 
-  action.validate = function (selection, sender) {
+  action.validate = async function (selection, sender) {
+    // if marker tag not set return false
+    const syncedPrefs = this.dependencyLibrary.loadSyncedPrefs()
+    if (syncedPrefs.readString('markerTagID') == null) return false
+
+    const markerTag = await this.dependencyLibrary.getPrefTag('markerTag')
+
     return (
       (selection.tasks.length > 0 || selection.projects.length > 0) &&
-      this.dependencyConfig.markerTag().tasks.length >= 1
+      markerTag.tasks.length >= 1
     )
   }
 

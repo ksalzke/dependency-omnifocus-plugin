@@ -4,9 +4,9 @@
     const syncedPrefs = this.dependencyLibrary.loadSyncedPrefs()
 
     // get current preferences or set defaults if they don't yet exist
-    const markerTag = (syncedPrefs.readString('markerTagID') !== null) ? await this.dependencyLibrary.getMarkerTag() : null
-    const prerequisiteTag = (syncedPrefs.readString('prerequisiteTagID') !== null) ? await this.dependencyLibrary.prereqTag() : null
-    const dependantTag = (syncedPrefs.readString('dependantTagID') !== null) ? await this.dependencyLibrary.dependantTag() : null
+    const markerTag = (syncedPrefs.readString('markerTagID') !== null) ? await this.dependencyLibrary.getPrefTag('markerTag') : null
+    const prerequisiteTag = (syncedPrefs.readString('prerequisiteTagID') !== null) ? await this.dependencyLibrary.getPrefTag('prerequisiteTag') : null
+    const dependantTag = (syncedPrefs.readString('dependantTagID') !== null) ? await this.dependencyLibrary.getPrefTag('dependantTag') : null
 
     // create and show form
     const form = new Form()

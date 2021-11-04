@@ -25,18 +25,11 @@
 
     // if not set, show preferences pane and then try again
     await this.action('preferences').perform()
-    return dependencyLibrary.getPrefTag()
+    return dependencyLibrary.getPrefTag(prefTag)
   }
 
-  dependencyLibrary.getMarkerTag = async () => await dependencyLibrary.getPrefTag('markerTag')
-
-  dependencyLibrary.dependantTag = async () => await dependencyLibrary.getPrefTag('dependantTag')
-
-  dependencyLibrary.prereqTag = async () => await dependencyLibrary.getPrefTag('prereqTag')
-
-  dependencyLibrary.getDependants = (task) => {
-    const dependantTag = dependencyLibrary.dependantTag()
-
+  dependencyLibrary.getDependants = async (task) => {
+    const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
     const dependantTasks = []
 
     // use regex to find [DEPENDANT: taskid] matches in the notes and capture task IDs
@@ -56,8 +49,8 @@
     return dependantTasks
   }
 
-  dependencyLibrary.getPrereqs = (task) => {
-    const prereqTag = dependencyLibrary.prereqTag()
+  dependencyLibrary.getPrereqs = async (task) => {
+    const prereqTag = await this.dependencyLibrary.getPrefTag('prerequisiteTag')
 
     const prereqTasks = []
 
@@ -78,13 +71,12 @@
     return prereqTasks
   }
 
-  dependencyLibrary.checkDependants = (task) => {
-    const dependantTag = dependencyLibrary.dependantTag()
-
+  dependencyLibrary.checkDependants = async (task) => {
+    const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
     const prerequisiteTask = task
 
     // get array of dependant tasks
-    const dependantTasks = dependencyLibrary.getDependants(task)
+    const dependantTasks = await dependencyLibrary.getDependants(task)
 
     function removeDependant (dependant, prerequisiteTask) {
       // get task ID of selected task
@@ -141,9 +133,7 @@
     }
 
     // check this task, and any parent tasks, for dependants
-    listOfTasks.forEach((task) => {
-      dependencyLibrary.checkDependants(task)
-    })
+    listOfTasks.forEach(async (task) => await dependencyLibrary.checkDependants(task))
   }
 
   return dependencyLibrary

@@ -1,10 +1,9 @@
 /* global PlugIn Task ApplyResult */
 (() => {
-  const action = new PlugIn.Action(function (selection, sender) {
+  const action = new PlugIn.Action(async function (selection, sender) {
     // config
-    const config = this.dependencyConfig
-    const dependantTag = config.dependantTag()
-    const prerequisiteTag = config.prerequisiteTag()
+    const prerequisiteTag = await this.dependencyLibrary.getPrefTag('prerequisiteTag')
+    const dependantTag = await this.dependencyLibrary.getPrefTag('dependantTag')
 
     const dependencyLibrary = this.dependencyLibrary
 
@@ -35,9 +34,7 @@
       }
 
       // for each prerequsite task that has been captured
-      prerequisiteTasksArray.forEach((prerequisiteTask) => {
-        dependencyLibrary.checkDependants(prerequisiteTask)
-      })
+      prerequisiteTasksArray.forEach(async (prerequisiteTask) => await dependencyLibrary.checkDependants(prerequisiteTask))
     })
   })
 

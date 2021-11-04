@@ -1,9 +1,8 @@
 /* global PlugIn */
 (() => {
-  const action = new PlugIn.Action(function (selection, sender) {
+  const action = new PlugIn.Action(async function (selection, sender) {
     // config
-    const config = this.dependencyConfig
-    const prereqTag = config.prerequisiteTag()
+    const prereqTag = await this.dependencyLibrary.getPrefTag('dependantTag')
 
     const dependencyLibrary = this.dependencyLibrary
 

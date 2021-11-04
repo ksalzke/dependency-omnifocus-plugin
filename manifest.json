@@ -33,9 +33,6 @@
   "libraries": [
     {
       "identifier": "dependencyLibrary"
-    },
-    {
-      "identifier": "dependencyConfig"
     }
   ]
 }
