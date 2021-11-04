@@ -1,64 +1,16 @@
-/* global PlugIn Project */
+/* global PlugIn */
 (() => {
   const action = new PlugIn.Action(async function (selection, sender) {
     // configure tags
     const markerTag = await this.dependencyLibrary.getPrefTag('markerTag')
-    const prerequisiteTag = await this.dependencyLibrary.getPrefTag('prerequisiteTag')
-    const dependantTag = await this.dependencyLibrary.getPrefTag('dependantTag')
 
-    const dependantTasks = selection.tasks
-    selection.projects.forEach(project => {
-      dependantTasks.push(project.task)
-    })
+    const dependantTasks = Array.from(selection.tasks).concat(Array.from(selection.projects).map(p => p.task))
 
-    function makeDependant (dep, prereq) {
-      const pId = prereq.id.primaryKey
-      dep.addTag(dependantTag) // add waiting tag to selected note
-      dep.note =
-        '[ PREREQUISITE: omnifocus:///task/' +
-        pId +
-        ' ] ' +
-        prereq.name +
-        '\n\n' +
-        dep.note // prepend prerequisite details to selected note
-
-      if (dep.project !== null) {
-        dep.project.status = Project.Status.OnHold
-      }
-
-      // if dependant task has children:
-      if (dep.hasChildren) {
-        if (dep.sequential) {
-          makeDependant(dep.children[0], prereq)
-        } else {
-          dep.children.forEach((child) => {
-            makeDependant(child, prereq)
-          })
-        }
-      }
-    }
-
-    // GET PREREQUISITE
     // get all tasks tagged with 'prerequisite'
-    const prereqTasks = markerTag.tasks
+    const prereqTasks = Array.from(markerTag.tasks)
 
-    prereqTasks.forEach((prereqTask) => {
-      dependantTasks.forEach(dependantTask => {
-        // DEAL WITH SELECTED (DEPENDENT) NOTE
-        makeDependant(dependantTask, prereqTask)
-
-        // DEAL WITH PREREQUISITE TASK
-        prereqTask.addTag(prerequisiteTag) // add tag to prerequisite
-        prereqTask.note =
-          '[ DEPENDANT: omnifocus:///task/' +
-          dependantTask.id.primaryKey +
-          ' ] ' +
-          dependantTask.name +
-          '\n\n' +
-          prereqTask.note // prepend dependant details to prerequisite note
-      })
-      prereqTask.removeTag(markerTag) // remove marker tag used for processing;
-    })
+    // add all selected tasks as dependants
+    prereqTasks.forEach((prereq) => dependantTasks.forEach(async (dep) => await this.dependencyLibrary.makeDependant(prereq, dep)))
   })
 
   action.validate = async function (selection, sender) {

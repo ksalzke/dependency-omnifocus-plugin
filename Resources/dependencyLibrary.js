@@ -17,6 +17,46 @@
     }
   }
 
+  dependencyLibrary.getLinks = () => {
+    const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
+    return syncedPrefs.read('links')
+  }
+
+  dependencyLibrary.addLink = (prereq, dep) => {
+    const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
+    const links = dependencyLibrary.getLinks() || []
+
+    links.push([prereq.id.primaryKey, dep.id.primaryKey])
+    syncedPrefs.write('links', links)
+  }
+
+  dependencyLibrary.makeDependant = async (prereq, dep) => {
+    const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
+    const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
+    const markerTag = await dependencyLibrary.getPrefTag('markerTag')
+
+    // add tags
+    dep.addTag(dependantTag)
+    prereq.addTag(prerequisiteTag)
+
+    // if dependant is project, set to on hold
+    if (dep.project !== null) dep.project.status = Project.Status.OnHold
+
+    // prepend prerequisite details to notes
+    dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
+    prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
+
+    // save link in synced prefs
+    dependencyLibrary.addLink(prereq, dep)
+
+    // if dependant task has children:
+    if (dep.hasChildren && dep.sequential) dependencyLibrary.makeDependant(dep.children[0])
+    if (dep.hasChildren && !dep.sequential) dep.children.forEach(child => dependencyLibrary.makeDependant(child, prereq))
+
+    // remove marker tag used for processing
+    prereq.removeTag(markerTag)
+  }
+
   dependencyLibrary.getPrefTag = async (prefTag) => {
     const preferences = dependencyLibrary.loadSyncedPrefs()
     const tagID = preferences.readString(`${prefTag}ID`)
