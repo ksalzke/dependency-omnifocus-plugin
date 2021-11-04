@@ -29,6 +29,8 @@ The plugin makes use of three tags:
 | Prerequisite | `🔑`                 | Denotes a task that is required to be completed before another (dependant) task becomes available.                      |
 | Dependant    | `🔒`                 | Denotes a task that is currently unavailable because it is waiting for another task to be completed. (Set to `On Hold`) |
 
+These tags can be set by using the 'Preferences' action, or the user will be prompted to select these when one of these is first required.
+
 # Actions
 
 This plug-in contains the following actions:
@@ -69,6 +71,10 @@ This action can be run when no tasks or projects are selected.
 For each task tagged as a prerequisite, it finds the earliest effective due date of its dependent tasks (including tasks that are indirectly dependent, i.e. a task that is dependent on the original task's dependant, and so on)
 
 It then updates the due dates on the prerequisite task, and any sequential actions that preceed it, to match the earliest due date.
+
+## Preferences
+
+This action allows the user to set the preferences for the plug-in. These sync between devices using the Synced Preferences plugin linked above. Currently, there are three preferences—one to set each of the tags outlined above.
 
 # Functions
 

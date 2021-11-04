@@ -24,6 +24,10 @@
     {
       "identifier": "updateDueDates",
       "image": "calendar.badge.plus"
+    },
+    {
+      "identifier": "preferences",
+      "image": "gearshape.2"
     }
   ],
   "libraries": [

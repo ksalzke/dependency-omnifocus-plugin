@@ -1,18 +1,38 @@
-/* global PlugIn Version ApplyResult Project */
+/* global PlugIn Version ApplyResult Project Alert Tag */
 (() => {
   const dependencyLibrary = new PlugIn.Library(new Version('1.0'))
 
-  dependencyLibrary.dependantTag = function () {
-    return PlugIn.find('com.KaitlinSalzke.DependencyForOmniFocus')
-      .library('dependencyConfig')
-      .dependantTag()
+  dependencyLibrary.loadSyncedPrefs = () => {
+    const syncedPrefsPlugin = PlugIn.find('com.KaitlinSalzke.SyncedPrefLibrary')
+
+    if (syncedPrefsPlugin !== null) {
+      const SyncedPref = syncedPrefsPlugin.library('syncedPrefLibrary').SyncedPref
+      return new SyncedPref('com.KaitlinSalzke.DependencyForOmniFocus')
+    } else {
+      const alert = new Alert(
+        'Synced Preferences Library Required',
+        'For the Dependency plug-in to work correctly, the \'Synced Preferences for OmniFocus\' plugin(https://github.com/ksalzke/synced-preferences-for-omnifocus) is also required and needs to be added to the plug-in folder separately. Either you do not currently have this plugin installed, or it is not installed correctly.'
+      )
+      alert.show()
+    }
   }
 
-  dependencyLibrary.prereqTag = function () {
-    return PlugIn.find('com.KaitlinSalzke.DependencyForOmniFocus')
-      .library('dependencyConfig')
-      .prerequisiteTag()
+  dependencyLibrary.getPrefTag = async (prefTag) => {
+    const preferences = dependencyLibrary.loadSyncedPrefs()
+    const tagID = preferences.readString(`${prefTag}ID`)
+
+    if (tagID !== null) return Tag.byIdentifier(tagID)
+
+    // if not set, show preferences pane and then try again
+    await this.action('preferences').perform()
+    return dependencyLibrary.getPrefTag()
   }
+
+  dependencyLibrary.getMarkerTag = async () => await dependencyLibrary.getPrefTag('markerTag')
+
+  dependencyLibrary.dependantTag = async () => await dependencyLibrary.getPrefTag('dependantTag')
+
+  dependencyLibrary.prereqTag = async () => await dependencyLibrary.getPrefTag('prereqTag')
 
   dependencyLibrary.getDependants = (task) => {
     const dependantTag = dependencyLibrary.dependantTag()
