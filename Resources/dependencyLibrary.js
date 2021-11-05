@@ -30,6 +30,13 @@
     syncedPrefs.write('links', links)
   }
 
+  dependencyLibrary.removeLink = (prereq, dep) => {
+    const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
+    const links = dependencyLibrary.getLinks() || []
+    const updated = links.filter(link => !(link[0] === prereq.id.primaryKey && link[1] === dep.id.primaryKey))
+    syncedPrefs.write('links', updated)
+  }
+
   dependencyLibrary.makeDependant = async (prereq, dep) => {
     const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
     const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
@@ -88,7 +95,10 @@
     function removeDependant (dependant, prerequisiteTask) {
       // get task ID of selected task
       const prerequisiteTaskId = prerequisiteTask.id.primaryKey
-      // remove the prerequisite tag from the dependant task
+
+      // remove the link
+      dependencyLibrary.removeLink(prerequisiteTask, dependant)
+
       const regexString =
         '[ ?PREREQUISITE: omnifocus:///task/' + prerequisiteTaskId + ' ?].+'
       RegExp.quote = function (str) {
