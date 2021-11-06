@@ -46,7 +46,7 @@
 
     // if dependant task has children:
     if (dep.hasChildren && dep.sequential) dependencyLibrary.addDependency(dep.children[0])
-    if (dep.hasChildren && !dep.sequential) dep.children.forEach(child => dependencyLibrary.addDependancy(child, prereq))
+    if (dep.hasChildren && !dep.sequential) dep.children.forEach(child => dependencyLibrary.addDependancy(prereq, child))
 
     // remove marker tag used for processing
     prereq.removeTag(markerTag)
