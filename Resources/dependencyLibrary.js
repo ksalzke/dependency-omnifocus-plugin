@@ -116,7 +116,7 @@
     return links.filter(link => link[0] === task.id.primaryKey).map(link => Task.byIdentifier(link[1]))
   }
 
-  dependencyLibrary.getPrereqs = async (task) => {
+  dependencyLibrary.getPrereqs = (task) => {
     const links = dependencyLibrary.getLinks()
     return links.filter(link => link[1] === task.id.primaryKey).map(link => Task.byIdentifier(link[0]))
   }
