@@ -22,6 +22,10 @@
       "image": "delete.right.fill"
     },
     {
+      "identifier": "goToDependant",
+      "image": "chevron.right.square.fill"
+    },
+    {
       "identifier": "checkPrerequisites",
       "image": "questionmark.circle"
     },

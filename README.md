@@ -55,6 +55,14 @@ This action is available when one or more tasks or projects with dependent actio
 
 It prompts the user to select from a list of the tasks' dependent actions and removes the chosen dependant(s) from any selected tasks by using the `removeDependancy` function.
 
+## Go To Dependant
+
+This action is available when a single task or project with one or more dependant actions are selected.
+
+If there is only one dependant task, this action navigates to that task.
+
+If there is more than one dependant task, the user is first prompted to select which one they would like to navigate to.
+
 ## Check Prerequisites
 
 This action can be run when no tasks or projects are selected.
