@@ -6,6 +6,10 @@
   "version": "2.3.0",
   "actions": [
     {
+      "identifier": "makePrerequisite",
+      "image": "key"
+    },
+    {
       "identifier": "addPrerequisite",
       "image": "key.fill"
     },
@@ -16,10 +20,6 @@
     {
       "identifier": "completeForPrerequisite",
       "image": "checkmark.square.fill"
-    },
-    {
-      "identifier": "makePrerequisite",
-      "image": "key"
     },
     {
       "identifier": "updateDueDates",

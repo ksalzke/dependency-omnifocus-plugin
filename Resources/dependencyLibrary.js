@@ -36,7 +36,7 @@
     // if dependant is project, set to on hold
     if (dep.project !== null) dep.project.status = Project.Status.OnHold
 
-    // prepend prerequisite details to notes
+    // prepend dependancy details to notes
     dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
     prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
 
@@ -122,7 +122,6 @@
   }
 
   dependencyLibrary.updateDependancies = () => {
-    // remove any links where one of the tasks does not exist
     const links = dependencyLibrary.getLinks()
 
     // get links where one or both of the values has been completed, dropped, or no longer exists
