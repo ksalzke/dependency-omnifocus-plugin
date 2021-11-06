@@ -6,6 +6,10 @@
   "version": "2.3.0",
   "actions": [
     {
+      "identifier": "addPrerequisiteMarker",
+      "image": "key"
+    },
+    {
       "identifier": "addPrerequisite",
       "image": "key.fill"
     },
@@ -18,20 +22,17 @@
       "image": "checkmark.square.fill"
     },
     {
-      "identifier": "makePrerequisite",
-      "image": "key"
-    },
-    {
       "identifier": "updateDueDates",
       "image": "calendar.badge.plus"
+    },
+    {
+      "identifier": "preferences",
+      "image": "gearshape.2"
     }
   ],
   "libraries": [
     {
       "identifier": "dependencyLibrary"
-    },
-    {
-      "identifier": "dependencyConfig"
     }
   ]
 }

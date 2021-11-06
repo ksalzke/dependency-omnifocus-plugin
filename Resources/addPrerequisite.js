@@ -1,72 +1,28 @@
-/* global PlugIn Project */
+/* global PlugIn */
 (() => {
-  const action = new PlugIn.Action(function (selection, sender) {
-    const config = this.dependencyConfig
-
+  const action = new PlugIn.Action(async function (selection, sender) {
     // configure tags
-    const markerTag = config.markerTag()
-    const prerequisiteTag = config.prerequisiteTag()
-    const dependantTag = config.dependantTag()
+    const markerTag = await this.dependencyLibrary.getPrefTag('markerTag')
 
-    const dependantTasks = selection.tasks
-    selection.projects.forEach(project => {
-      dependantTasks.push(project.task)
-    })
+    const dependantTasks = Array.from(selection.tasks).concat(Array.from(selection.projects).map(p => p.task))
 
-    function makeDependant (dep, prereq) {
-      const pId = prereq.id.primaryKey
-      dep.addTag(dependantTag) // add waiting tag to selected note
-      dep.note =
-        '[ PREREQUISITE: omnifocus:///task/' +
-        pId +
-        ' ] ' +
-        prereq.name +
-        '\n\n' +
-        dep.note // prepend prerequisite details to selected note
-
-      if (dep.project !== null) {
-        dep.project.status = Project.Status.OnHold
-      }
-
-      // if dependant task has children:
-      if (dep.hasChildren) {
-        if (dep.sequential) {
-          makeDependant(dep.children[0], prereq)
-        } else {
-          dep.children.forEach((child) => {
-            makeDependant(child, prereq)
-          })
-        }
-      }
-    }
-
-    // GET PREREQUISITE
     // get all tasks tagged with 'prerequisite'
-    const prereqTasks = markerTag.tasks
+    const prereqTasks = Array.from(markerTag.tasks)
 
-    prereqTasks.forEach((prereqTask) => {
-      dependantTasks.forEach(dependantTask => {
-        // DEAL WITH SELECTED (DEPENDENT) NOTE
-        makeDependant(dependantTask, prereqTask)
-
-        // DEAL WITH PREREQUISITE TASK
-        prereqTask.addTag(prerequisiteTag) // add tag to prerequisite
-        prereqTask.note =
-          '[ DEPENDANT: omnifocus:///task/' +
-          dependantTask.id.primaryKey +
-          ' ] ' +
-          dependantTask.name +
-          '\n\n' +
-          prereqTask.note // prepend dependant details to prerequisite note
-      })
-      prereqTask.removeTag(markerTag) // remove marker tag used for processing;
-    })
+    // add all selected tasks as dependants
+    prereqTasks.forEach((prereq) => dependantTasks.forEach(async (dep) => await this.dependencyLibrary.addDependancy(prereq, dep)))
   })
 
-  action.validate = function (selection, sender) {
+  action.validate = async function (selection, sender) {
+    // if marker tag not set return false
+    const syncedPrefs = this.dependencyLibrary.loadSyncedPrefs()
+    if (syncedPrefs.readString('markerTagID') == null) return false
+
+    const markerTag = await this.dependencyLibrary.getPrefTag('markerTag')
+
     return (
       (selection.tasks.length > 0 || selection.projects.length > 0) &&
-      this.dependencyConfig.markerTag().tasks.length >= 1
+      markerTag.tasks.length >= 1
     )
   }
 

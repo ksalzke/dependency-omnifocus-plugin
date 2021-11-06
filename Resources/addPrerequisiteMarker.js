@@ -1,10 +1,7 @@
 /* global PlugIn */
 (() => {
-  const action = new PlugIn.Action(function (selection, sender) {
-    const config = this.dependencyConfig
-
-    // configure tags
-    const markerTag = config.markerTag()
+  const action = new PlugIn.Action(async function (selection, sender) {
+    const markerTag = await this.dependencyLibrary.getPrefTag('markerTag')
 
     selection.tasks.forEach(function (task) {
       task.addTag(markerTag)
