@@ -1,3 +1,18 @@
+# [3.0.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v2.3.0...v3.0.0) (2021-11-06)
+
+
+### Features
+
+* use syncedPrefs ([c8d8c19](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/c8d8c19cd64f68019f634f6e12d2980a5cdd65a1))
+
+
+### BREAKING CHANGES
+
+* 'Make Prerequisite' renamed to 'Add Prerequisite Marker' for clarity
+* remove unused functions 'checkDependants', 'checkDependantsForTaskAndAncestors'
+
+
+
 # [2.3.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v2.2.0...v2.3.0) (2021-11-01)
 
 
