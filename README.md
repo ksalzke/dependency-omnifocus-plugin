@@ -49,6 +49,12 @@ This action is available when one or more tasks or projects with prerequisite ac
 
 It prompts the user to select from a list of the tasks' prerequisite actions and removes the chosen prerequisite(s) from any selected tasks by using the `removeDependancy` function.
 
+## Remove Dependant(s)
+
+This action is available when one or more tasks or projects with dependent actions are selected.
+
+It prompts the user to select from a list of the tasks' dependent actions and removes the chosen dependant(s) from any selected tasks by using the `removeDependancy` function.
+
 ## Check Prerequisites
 
 This action can be run when no tasks or projects are selected.

@@ -18,6 +18,10 @@
       "image": "delete.left.fill"
     },
     {
+      "identifier": "removeDependants",
+      "image": "delete.right.fill"
+    },
+    {
       "identifier": "checkPrerequisites",
       "image": "questionmark.circle"
     },
