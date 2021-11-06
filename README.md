@@ -43,6 +43,12 @@ This action can be run when one or more tasks have the marker tag and one or mor
 
 For each prerequisite/dependant pair, the `addDependency` function is run i.e. each selected task becomes a dependant of each tagged task.
 
+## Remove Prerequisite(s)
+
+This action is available when one or more tasks or projects with prerequisite actions are selected.
+
+It prompts the user to select from a list of the tasks' prerequisite actions and removes the chosen prerequisite(s) from any selected tasks by using the `removeDependancy` function.
+
 ## Check Prerequisites
 
 This action can be run when no tasks or projects are selected.
