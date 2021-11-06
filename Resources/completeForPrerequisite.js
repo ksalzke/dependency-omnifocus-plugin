@@ -12,7 +12,7 @@
     task.markComplete()
 
     // check dependants
-    this.dependencyLibrary.checkDependantsForTaskAndAncestors(task)
+    this.dependencyLibrary.updateDependancies()
   })
 
   action.validate = function (selection, sender) {

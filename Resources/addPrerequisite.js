@@ -10,7 +10,7 @@
     const prereqTasks = Array.from(markerTag.tasks)
 
     // add all selected tasks as dependants
-    prereqTasks.forEach((prereq) => dependantTasks.forEach(async (dep) => await this.dependencyLibrary.makeDependant(prereq, dep)))
+    prereqTasks.forEach((prereq) => dependantTasks.forEach(async (dep) => await this.dependencyLibrary.addDependancy(prereq, dep)))
   })
 
   action.validate = async function (selection, sender) {
