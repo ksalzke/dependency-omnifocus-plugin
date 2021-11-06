@@ -4,6 +4,10 @@
 ### Features
 
 * use syncedPrefs ([c8d8c19](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/c8d8c19cd64f68019f634f6e12d2980a5cdd65a1))
+* remove requirement for function library plugin
+* *add new functions 'loadSyncedPrefs', 'getLinks', 'addDependency', 'getPrefTag', 'updateDependencies'
+* extend 'Complete For Prerequisite' to work when multiple tasks/projects are selected
+
 
 
 ### BREAKING CHANGES
