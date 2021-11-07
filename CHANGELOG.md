@@ -1,3 +1,18 @@
+# [3.2.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.1.0...v3.2.0) (2021-11-07)
+
+
+### Bug Fixes
+
+* get updateDueDates working ([d4897b0](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/d4897b06bf8b4a607020780edc9d2d3d4ea45f8e))
+
+
+### Features
+
+* add getAllPrereqs function ([f6a974e](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/f6a974eddd4602672714599f3ef38394b5e49b85))
+* add preference to update due dates ([7fcfb88](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/7fcfb88cf86a66271826c218542fecc720f0fcc8))
+
+
+
 # [3.1.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.0.0...v3.1.0) (2021-11-07)
 
 
