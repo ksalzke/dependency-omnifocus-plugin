@@ -121,6 +121,18 @@
     return links.filter(link => link[1] === task.id.primaryKey).map(link => Task.byIdentifier(link[0]))
   }
 
+  dependencyLibrary.getAllPrereqs = (task) => {
+    const getAllPrereqs = (tasks) => {
+      const prereqs = tasks.flatMap(task => dependencyLibrary.getPrereqs(task))
+      if (prereqs.length === 0) return tasks
+      return getAllPrereqs(prereqs).concat(tasks)
+    }
+
+    const firstPrereqs = dependencyLibrary.getPrereqs(task)
+
+    return getAllPrereqs(firstPrereqs)
+  }
+
   dependencyLibrary.updateDependancies = () => {
     const links = dependencyLibrary.getLinks()
 
