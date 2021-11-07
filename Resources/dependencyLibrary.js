@@ -36,9 +36,12 @@
     // if dependant is project, set to on hold
     if (dep.project !== null) dep.project.status = Project.Status.OnHold
 
-    // prepend dependancy details to notes
-    dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
-    prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
+    // prepend dependancy details to notes if that setting is selected
+    const addToNote = (syncedPrefs.read('addToNote') !== null) ? syncedPrefs.readBoolean('addToNote') : true
+    if (addToNote) {
+      dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
+      prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
+    }
 
     // save link in synced prefs
     links.push([prereq.id.primaryKey, dep.id.primaryKey])

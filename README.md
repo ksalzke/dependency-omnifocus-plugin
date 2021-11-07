@@ -91,9 +91,12 @@ This action can be run when no tasks or projects are selected. It runs the `upda
 
 ## Preferences
 
-This action allows the user to set the preferences for the plug-in. These sync between devices using the Synced Preferences plugin linked above. Currently, there are three preferences—one to set each of the tags outlined above.
+This action allows the user to set the preferences for the plug-in. These sync between devices using the Synced Preferences plugin linked above.
 
-There is also a fourth preference, "Set due dates when updating 'Check Prerequisites' action". If this is selected, then `updateDueDates` is also run as part of the 'Check Prerequisites' action.
+There is a preference to select each of the tags outlined above. In addition, the following preferences are available:
+
+* **Set due dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDueDates` is also run as part of the 'Check Prerequisites' action.
+* **Add link to related tasks to notes**. If this is selected, a link to the prerequisite task is added to the note of the dependant task when a new link is created, and vice versa. (Note that this setting does not change the notes for existing dependencies.)
 
 # Functions
 
@@ -119,7 +122,7 @@ If no links have been created yet, an empty array is returned.
 
 This asynchronous function:
 1. Adds the dependant tag to the dependant task and the prerequisite tag to the prerequisite task
-2. Prepends a link to the prerequisite tasks in the dependant task's note in the form `[ DEPENDANT: omnifocus:///task/<id> ] Task name`, and prepends a similar link to the dependant task's note.
+2. Prepends a link to the prerequisite tasks in the dependant task's note in the form `[ DEPENDANT: omnifocus:///task/<id> ] Task name`, and prepends a similar link to the dependant task's note. (This is not done if the option is deselected in preferences.)
 3. Saves a "link" in the SyncedPref object (see `getLinks` for details on how these are stored)
 4. If the dependant task has children, then the function is called again for either all children (in the case of a parallel action group) or the first child (in the case of a sequential action group).
 5. Removes the marker tag from the prerequisite
