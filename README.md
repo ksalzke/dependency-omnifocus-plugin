@@ -85,13 +85,9 @@ It marks the selected tasks or projects as complete and runs the `updateDependen
 
 ## Update Due Dates
 
-**Important note: This action is not currently working as expected and requires review/fixing. I hope to fix this soon.**
-
 This action can be run when no tasks or projects are selected.
 
-For each task tagged as a prerequisite, it finds the earliest effective due date of its dependent tasks (including tasks that are indirectly dependent, i.e. a task that is dependent on the original task's dependant, and so on)
-
-It then updates the due dates on the prerequisite task, and any sequential actions that preceed it, to match the earliest due date.
+For each dependant task, it finds all prerequisites (direct and indirect) using the `getAllPrerequisites` function. For each prerequisite, it then updates the due date if there is no effective due date set, or if the currently set due date is _after_ the dependant's due date. It also updates any sequential actions that precede the prerequisite task.
 
 ## Preferences
 
