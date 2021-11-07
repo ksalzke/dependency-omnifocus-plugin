@@ -151,6 +151,10 @@ This function takes a task object as input, and returns an array of its (direct)
 
 This function takes a task object as input, and returns an array of its (direct) prerequisite tasks. If it has no prerequisite tasks, it returns an empty array.
 
+## `getAllPrereqs (task: Task) : Array<Task>`
+
+This function takes a task object as input, and returns an array of its prerequisites, both direct and indirect. i.e. if T1 is a prerequisite of T2 and T2 is a prerequisite of T3, then passing T3 as a parameter would return an array containing both T1 and T2.
+
 ## `updateDependencies ()`
 
 This function goes through the links stored in the SyncedPref object, and for any link where one or both of the values has been completed, dropped, or no longer exists, runs the `removeDependency` function.
