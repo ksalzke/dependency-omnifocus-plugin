@@ -1,7 +1,8 @@
 /* global PlugIn */
 (() => {
   const action = new PlugIn.Action(async function (selection, sender) {
-    this.dependencyLibrary.updateDependancies()
+    const syncedPrefs = this.dependencyLibrary.loadSyncedPrefs()
+    syncedPrefs.readBoolean('updateDates') ? this.dependencyLibrary.updateDueDates() : this.dependencyLibrary.updateDependancies()
   })
 
   action.validate = function (selection, sender) {

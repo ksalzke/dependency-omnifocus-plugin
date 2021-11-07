@@ -77,6 +77,8 @@ This action can be run when no tasks or projects are selected.
 
 It reviews all the dependencies and updates them as needed by running `updateDependencies`.
 
+If the preference to "Set due dates when updating 'Check Prerequisites' action" has been selected, then `updateDueDates` is also run.
+
 ## Complete For Prerequisites
 
 This action can be run when one or more tasks or projects are selected.
@@ -90,6 +92,8 @@ This action can be run when no tasks or projects are selected. It runs the `upda
 ## Preferences
 
 This action allows the user to set the preferences for the plug-in. These sync between devices using the Synced Preferences plugin linked above. Currently, there are three preferences—one to set each of the tags outlined above.
+
+There is also a fourth preference, "Set due dates when updating 'Check Prerequisites' action". If this is selected, then `updateDueDates` is also run as part of the 'Check Prerequisites' action.
 
 # Functions
 
