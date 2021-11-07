@@ -1,3 +1,12 @@
+# [3.3.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.2.0...v3.3.0) (2021-11-07)
+
+
+### Features
+
+* add pref to make links in notes optional ([454254b](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/454254bba1628b508284c4eff98acd837c12ad97)), closes [#9](https://github.com/ksalzke/dependency-omnifocus-plugin/issues/9)
+
+
+
 # [3.2.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.1.0...v3.2.0) (2021-11-07)
 
 
