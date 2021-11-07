@@ -85,9 +85,7 @@ It marks the selected tasks or projects as complete and runs the `updateDependen
 
 ## Update Due Dates
 
-This action can be run when no tasks or projects are selected.
-
-For each dependant task, it finds all prerequisites (direct and indirect) using the `getAllPrerequisites` function. For each prerequisite, it then updates the due date if there is no effective due date set, or if the currently set due date is _after_ the dependant's due date. It also updates any sequential actions that precede the prerequisite task.
+This action can be run when no tasks or projects are selected. It runs the `updateDueDates` function.
 
 ## Preferences
 
@@ -154,3 +152,7 @@ This function takes a task object as input, and returns an array of its prerequi
 ## `updateDependencies ()`
 
 This function goes through the links stored in the SyncedPref object, and for any link where one or both of the values has been completed, dropped, or no longer exists, runs the `removeDependency` function.
+
+## `updateDueDates ()`
+
+For each dependant task, this function finds all prerequisites (direct and indirect) using the `getAllPrerequisites` function. For each prerequisite, it then updates the due date if there is no effective due date set, or if the currently set due date is _after_ the dependant's due date. It also updates any sequential actions that precede the prerequisite task.
