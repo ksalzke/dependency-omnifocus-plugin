@@ -1,3 +1,12 @@
+# [3.5.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.4.0...v3.5.0) (2021-11-08)
+
+
+### Features
+
+* add 'Update Defer Dates' action ([f550abf](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/f550abf163da2a76b24f3f7772691f6d3e816cf5))
+
+
+
 # [3.4.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.3.0...v3.4.0) (2021-11-08)
 
 
