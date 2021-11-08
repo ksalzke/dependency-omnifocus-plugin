@@ -1,0 +1,67 @@
+
+/* global PlugIn */
+/* eslint spaced-comment: ["error", "always", { "exceptions": ["{"] }] */
+/*{
+"type": "action",
+"targets": ["omnifocus"],
+"author": "Kaitlin Salzke",
+"identifier": "com.KaitlinSalzke.UpdateToDependencyV3",
+"version": "1.0",
+}*/
+(() => {
+  const action = new PlugIn.Action(async function (selection, sender) {
+    const dependencyLibrary = PlugIn.find('com.KaitlinSalzke.DependencyForOmniFocus').library('dependencyLibrary')
+    const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
+    const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
+    const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
+
+    const getDependantIDs = (task) => {
+      const dependantTaskIDs = []
+
+      // use regex to find [DEPENDANT: taskid] matches in the notes and capture task IDs
+      const regex = /\[ ?DEPENDANT: omnifocus:\/\/\/task\/(.*?) ?\]/g
+      let regexArray = []
+      while ((regexArray = regex.exec(task.note)) !== null) {
+        // for each captured task ID
+        const dependantTaskId = regexArray[1]
+        dependantTaskIDs.push(dependantTaskId)
+      }
+      return dependantTaskIDs
+    }
+
+    const getPrereqIDs = (task) => {
+      const prereqTaskIDs = []
+
+      // use regex to find [PREREQUISITE: taskid] matches in the notes and capture task IDs
+      const regex = /\[ ?PREREQUISITE: omnifocus:\/\/\/task\/(.*?) ?\]/g
+      let regexArray = []
+      while ((regexArray = regex.exec(task.note)) !== null) {
+        // for each captured task ID
+        const prereqTaskId = regexArray[1]
+        prereqTaskIDs.push(prereqTaskId)
+      }
+      return prereqTaskIDs
+    }
+
+    // temporarily set pref to 'don't add note'
+    const addToNotePref = (syncedPrefs.read('addToNote') !== null) ? syncedPrefs.readBoolean('addToNote') : true
+    syncedPrefs.write('addToNote', false)
+
+    const links = dependencyLibrary.getLinks()
+    dependantTag.tasks.forEach(dep => getPrereqIDs(dep).forEach(prereqID => links.push([prereqID, dep.id.primaryKey])))
+    prerequisiteTag.tasks.forEach(prereq => getDependantIDs(prereq).forEach(depID => links.push([prereq.id.primaryKey, depID])))
+    syncedPrefs.write('links', links)
+
+    // set 'add to note' preference back to original state
+    syncedPrefs.write('addToNote', addToNotePref)
+
+    dependencyLibrary.updateDependencies()
+  })
+
+  action.validate = function (selection, sender) {
+    // validation code
+    return true
+  }
+
+  return action
+})()

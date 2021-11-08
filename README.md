@@ -8,6 +8,8 @@ _Please note that all scripts on my GitHub account (or shared elsewhere) are wor
 
 Refer to the 'issues' in this repo for known issues and planned changes/enhancements.
 
+Changes to the way data from this plugin is stored were made in version 3. If you were using a previous version, you can use the script 'updateToV3' (saved in this repository) to move to the new structure. Simply move this file into your plugins folder; once it has been run once, it may be deleted.
+
 # Installation & Set-Up
 
 **Important note: for this plug-in bundle to work correctly, my [Synced Preferences for OmniFocus plugin](https://github.com/ksalzke/synced-preferences-for-omnifocus) is also required and needs to be added to the plug-in folder separately.**
