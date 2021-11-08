@@ -91,6 +91,10 @@ It marks the selected tasks or projects as complete and runs the `updateDependen
 
 This action can be run when no tasks or projects are selected. It runs the `updateDueDates` function.
 
+## Update Defer Dates
+
+This action can be run when no tasks or projects are selected. It runs the `updateDeferDates` function.
+
 ## Preferences
 
 This action allows the user to set the preferences for the plug-in. These sync between devices using the Synced Preferences plugin linked above.
@@ -98,6 +102,7 @@ This action allows the user to set the preferences for the plug-in. These sync b
 There is a preference to select each of the tags outlined above. In addition, the following preferences are available:
 
 * **Set due dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDueDates` is also run as part of the 'Check Prerequisites' action.
+* **Set defer dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDeferDates` is also run as part of the 'Check Prerequisites' action.
 * **Add link to related tasks to notes**. If this is selected, a link to the prerequisite task is added to the note of the dependant task when a new link is created, and vice versa. (Note that this setting does not change the notes for existing dependencies.)
 
 # Functions
@@ -158,6 +163,10 @@ This function takes a task object as input, and returns an array of its (direct)
 
 This function takes a task object as input, and returns an array of its prerequisites, both direct and indirect. i.e. if T1 is a prerequisite of T2 and T2 is a prerequisite of T3, then passing T3 as a parameter would return an array containing both T1 and T2.
 
+## `getAllDependants (task: Task) : Array<Task>`
+
+This function takes a task object as input, and returns an array of its dependants, both direct and indirect. i.e. if T1 is a prerequisite of T2 and T2 is a prerequisite of T3, then passing T1 as a parameter would return an array containing both T2 and T3.
+
 ## `updateDependencies ()`
 
 This function goes through the links stored in the SyncedPref object, and for any link where one or both of the values has been completed, dropped, or no longer exists, runs the `removeDependency` function.
@@ -165,3 +174,7 @@ This function goes through the links stored in the SyncedPref object, and for an
 ## `updateDueDates ()`
 
 For each dependant task, this function finds all prerequisites (direct and indirect) using the `getAllPrerequisites` function. For each prerequisite, it then updates the due date if there is no effective due date set, or if the currently set due date is _after_ the dependant's due date. It also updates any sequential actions that precede the prerequisite task.
+
+## `updateDeferDates ()`
+
+For each prerequisite task, this function finds all dependants (direct and indirect) using the `getAllDependants` function. For each dependant, it then updates the defer date if there is no effective defer date set, or if the currently set defer date is _before_ the prerequisite's defer date. It also updates any sequential actions that follow the dependant task.

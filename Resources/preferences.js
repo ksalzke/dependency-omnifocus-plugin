@@ -8,6 +8,7 @@
     const prerequisiteTag = (syncedPrefs.readString('prerequisiteTagID') !== null) ? await this.dependencyLibrary.getPrefTag('prerequisiteTag') : null
     const dependantTag = (syncedPrefs.readString('dependantTagID') !== null) ? await this.dependencyLibrary.getPrefTag('dependantTag') : null
     const updateDates = syncedPrefs.readBoolean('updateDates')
+    const updateDeferDates = syncedPrefs.readBoolean('updateDeferDates')
     const addToNote = (syncedPrefs.read('addToNote') !== null) ? syncedPrefs.readBoolean('addToNote') : true
 
     // create and show form
@@ -17,6 +18,7 @@
     form.addField(new Form.Field.Option('prerequisiteTag', 'Prerequisite Tag', flattenedTags, tagNames, prerequisiteTag, null))
     form.addField(new Form.Field.Option('dependantTag', 'Dependant Tag', flattenedTags, tagNames, dependantTag, null))
     form.addField(new Form.Field.Checkbox('updateDates', 'Set due dates when updating \'Check Prerequisites\' action', updateDates))
+    form.addField(new Form.Field.Checkbox('updateDeferDates', 'Set defer dates when updating \'Check Prerequisites\' action', updateDeferDates))
     form.addField(new Form.Field.Checkbox('addToNote', 'Add link to related tasks to notes', addToNote))
     await form.show('Preferences: Dependency', 'OK')
 
@@ -25,6 +27,7 @@
     syncedPrefs.write('prerequisiteTagID', form.values.prerequisiteTag.id.primaryKey)
     syncedPrefs.write('dependantTagID', form.values.dependantTag.id.primaryKey)
     syncedPrefs.write('updateDates', form.values.updateDates)
+    syncedPrefs.write('updateDeferDates', form.values.updateDeferDates)
     syncedPrefs.write('addToNote', form.values.addToNote)
   })
 

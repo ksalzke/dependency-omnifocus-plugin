@@ -42,6 +42,10 @@
       "image": "calendar.badge.plus"
     },
     {
+      "identifier": "updateDeferDates",
+      "image": "calendar.badge.clock"
+    },
+    {
       "identifier": "preferences",
       "image": "gearshape.2"
     }

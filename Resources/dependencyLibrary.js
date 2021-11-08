@@ -136,6 +136,18 @@
     return getAllPrereqs(firstPrereqs)
   }
 
+  dependencyLibrary.getAllDependants = (task) => {
+    const getAllDependants = (tasks) => {
+      const deps = tasks.flatMap(task => dependencyLibrary.getDependants(task))
+      if (deps.length === 0) return tasks
+      return getAllDependants(deps).concat(tasks)
+    }
+
+    const firstDeps = dependencyLibrary.getDependants(task)
+
+    return getAllDependants(firstDeps)
+  }
+
   dependencyLibrary.updateDependancies = () => {
     const links = dependencyLibrary.getLinks()
 
@@ -179,6 +191,43 @@
           const pIndex = siblings.indexOf(p)
           const precedingTasks = siblings.slice(0, pIndex)
           updateDate(precedingTasks, dep.effectiveDueDate)
+        }
+      })
+    })
+  }
+
+  dependencyLibrary.updateDeferDates = () => {
+    // make sure any old links have been cleared out
+    dependencyLibrary.updateDependancies()
+
+    // get all prerequisite tasks
+    const prereqs = dependencyLibrary.getLinks().map(link => Task.byIdentifier(link[0]))
+
+    // limit to those with defer dates
+    const deferredPrereqs = prereqs.filter(p => p.effectiveDeferDate !== null)
+
+    // process each prerequisite task with defer date
+    const updateDate = (tasks, date) => {
+      // console.log('effective defer date: '+tasks.map(t => t.effectiveDeferDate))
+      const tasksToUpdate = tasks.filter(t => t.effectiveDeferDate === null || date > t.effectiveDeferDate)
+      // console.log('to update: '+tasksToUpdate)
+      tasksToUpdate.forEach(t => (t.deferDate = date))
+      return tasksToUpdate
+    }
+
+    deferredPrereqs.forEach(prereq => {
+      // get a complete list of dependants (including indirect ones) and update the date
+      const deps = dependencyLibrary.getAllDependants(prereq)
+      if (prereq.id.primaryKey === 'jBlljdtdlfB') console.log(deps)
+      const updatedDeps = updateDate(deps, prereq.effectiveDeferDate)
+
+      // if part of a sequential action group/project, also update defer date of subsequent actions
+      updatedDeps.forEach(d => {
+        if (d.parent !== null && d.parent.sequential) {
+          const siblings = d.parent.children
+          const dIndex = siblings.indexOf(d)
+          const subsequentTasks = siblings.slice(dIndex)
+          updateDate(subsequentTasks, prereq.effectiveDeferDate)
         }
       })
     })
