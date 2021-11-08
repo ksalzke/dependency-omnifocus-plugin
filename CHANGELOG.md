@@ -1,3 +1,12 @@
+# [3.4.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.3.0...v3.4.0) (2021-11-08)
+
+
+### Features
+
+* add 'updateToV3' helper script ([8054463](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/8054463172cb1e4bf5db720e79c24000ef458eba))
+
+
+
 # [3.3.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.2.0...v3.3.0) (2021-11-07)
 
 
