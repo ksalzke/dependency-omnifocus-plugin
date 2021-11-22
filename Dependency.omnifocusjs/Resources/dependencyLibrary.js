@@ -72,7 +72,7 @@
       // remove dep from prereq note
       const regexString1 = `[ ?DEPENDANT: omnifocus:///task/${depID} ?].+`
       RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
-      const regexForNoteSearch1 = new RegExp(RegExp.quote(regexString1))
+      const regexForNoteSearch1 = new RegExp(RegExp.quote(regexString1), 'g')
       prereq.note = prereq.note.replace(regexForNoteSearch1, '')
 
       // if no remaining dependancies, remove tag from prereq task
@@ -87,7 +87,7 @@
       // remove prereq from dep note
       const regexString2 = `[ ?PREREQUISITE: omnifocus:///task/${prereqID} ?].+`
       RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
-      const regexForNoteSearch2 = new RegExp(RegExp.quote(regexString2))
+      const regexForNoteSearch2 = new RegExp(RegExp.quote(regexString2), 'g')
       dep.note = dep.note.replace(regexForNoteSearch2, '')
 
       // if no remaining prerequisites, remove tag from dependant task (and if project set to active)
