@@ -168,12 +168,12 @@ This function takes a task object as input, and returns an array of its dependan
 
 ## `updateDependencies ()`
 
-This function goes through the links stored in the SyncedPref object, and for any link where one or both of the values has been completed, dropped, or no longer exists, runs the `removeDependency` function.
+This asynchronous function goes through the links stored in the SyncedPref object, and for any link where one or both of the values has been completed, dropped, or no longer exists, runs the `removeDependency` function.
 
 ## `updateDueDates ()`
 
-For each dependant task, this function finds all prerequisites (direct and indirect) using the `getAllPrerequisites` function. For each prerequisite, it then updates the due date if there is no effective due date set, or if the currently set due date is _after_ the dependant's due date. It also updates any sequential actions that precede the prerequisite task.
+For each dependant task, this asynchronous function finds all prerequisites (direct and indirect) using the `getAllPrerequisites` function. For each prerequisite, it then updates the due date if there is no effective due date set, or if the currently set due date is _after_ the dependant's due date. It also updates any sequential actions that precede the prerequisite task.
 
 ## `updateDeferDates ()`
 
-For each prerequisite task, this function finds all dependants (direct and indirect) using the `getAllDependants` function. For each dependant, it then updates the defer date if there is no effective defer date set, or if the currently set defer date is _before_ the prerequisite's defer date. It also updates any sequential actions that follow the dependant task.
+For each prerequisite task, this asynchronous function finds all dependants (direct and indirect) using the `getAllDependants` function. For each dependant, it then updates the defer date if there is no effective defer date set, or if the currently set defer date is _before_ the prerequisite's defer date. It also updates any sequential actions that follow the dependant task.
