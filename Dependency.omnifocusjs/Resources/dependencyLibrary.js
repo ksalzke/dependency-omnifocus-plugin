@@ -148,7 +148,7 @@
     return getAllDependants(firstDeps)
   }
 
-  dependencyLibrary.updateDependancies = () => {
+  dependencyLibrary.updateDependancies = async () => {
     const links = dependencyLibrary.getLinks()
 
     // get links where one or both of the values has been completed, dropped, or no longer exists
@@ -160,11 +160,22 @@
     })
 
     linksToRemove.forEach(link => dependencyLibrary.removeDependancy(link[0], link[1]))
+
+    // check tasks tagged with 'dependent' or 'prerequisite' and if they are not included in links, remove tag
+    const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
+    prerequisiteTag.tasks.forEach(task => {
+      if (dependencyLibrary.getPrereqs(task).length === 0) task.removeTag(prerequisiteTag)
+    })
+
+    const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
+    dependantTag.tasks.forEach(task => {
+      if (dependencyLibrary.getDependants(task).length === 0) task.removeTag(dependantTag)
+    })
   }
 
-  dependencyLibrary.updateDueDates = () => {
+  dependencyLibrary.updateDueDates = async () => {
     // make sure any old links have been cleared out
-    dependencyLibrary.updateDependancies()
+    await dependencyLibrary.updateDependancies()
 
     // get all dependant tasks
     const deps = dependencyLibrary.getLinks().map(link => Task.byIdentifier(link[1]))
@@ -196,9 +207,9 @@
     })
   }
 
-  dependencyLibrary.updateDeferDates = () => {
+  dependencyLibrary.updateDeferDates = async () => {
     // make sure any old links have been cleared out
-    dependencyLibrary.updateDependancies()
+    await dependencyLibrary.updateDependancies()
 
     // get all prerequisite tasks
     const prereqs = dependencyLibrary.getLinks().map(link => Task.byIdentifier(link[0]))

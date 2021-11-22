@@ -1,6 +1,6 @@
 /* global PlugIn */
 (() => {
-  const action = new PlugIn.Action(function (selection, sender) {
+  const action = new PlugIn.Action(async function (selection, sender) {
     // if called externally (from script) generate selection object
     if (typeof selection === 'undefined') {
       selection = document.windows[0].selection
@@ -11,7 +11,7 @@
     selection.projects.forEach(project => project.markComplete())
 
     // check dependants
-    this.dependencyLibrary.updateDependancies()
+    await this.dependencyLibrary.updateDependancies()
   })
 
   action.validate = function (selection, sender) {
