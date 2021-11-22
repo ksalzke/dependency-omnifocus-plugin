@@ -1,3 +1,12 @@
+# [3.6.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.5.0...v3.6.0) (2021-11-22)
+
+
+### Features
+
+* restructure for easier installation ([d600397](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/d6003971eaff7e1da094b23f64d7040897be71b4))
+
+
+
 # [3.5.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.4.0...v3.5.0) (2021-11-08)
 
 
