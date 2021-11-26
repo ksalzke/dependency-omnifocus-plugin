@@ -163,13 +163,15 @@
 
     // check tasks tagged with 'dependent' or 'prerequisite' and if they are not included in links, remove tag
     const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
-    prerequisiteTag.tasks.forEach(task => {
-      if (dependencyLibrary.getPrereqs(task).length === 0) task.removeTag(prerequisiteTag)
+    prerequisiteTag.tasks.forEach(async task => {
+      const deps = await dependencyLibrary.getDependants(task)
+      if (deps.length === 0) task.removeTag(prerequisiteTag)
     })
 
     const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
-    dependantTag.tasks.forEach(task => {
-      if (dependencyLibrary.getDependants(task).length === 0) task.removeTag(dependantTag)
+    dependantTag.tasks.forEach(async task => {
+      const prereqs = await dependencyLibrary.getPrereqs(task)
+      if (prereqs.length === 0) task.removeTag(dependantTag)
     })
   }
 
