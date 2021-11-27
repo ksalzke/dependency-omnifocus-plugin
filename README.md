@@ -25,8 +25,8 @@ The plugin makes use of three tags:
 | Tag          | Example             | Description                                                                                                             |
 | ------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Marker       | `Make Prerequisite` | A temporary tag used to denote which actions should become prerequisites when the `Add Prerequisite` action is run.     |
-| Prerequisite | `🔑`                 | Denotes a task that is required to be completed before another (dependant) task becomes available.                      |
-| Dependant    | `🔒`                 | Denotes a task that is currently unavailable because it is waiting for another task to be completed. (Set to `On Hold`) |
+| Prerequisite | `🔑`                 | Denotes a task that is required to be completed before another (dependent) task becomes available.                      |
+| Dependent    | `🔒`                 | Denotes a task that is currently unavailable because it is waiting for another task to be completed. (Set to `On Hold`) |
 
 These tags can be set by using the 'Preferences' action, or the user will be prompted to choose them when one is first required.
 
@@ -42,19 +42,19 @@ This action can be run when one or more tasks are selected. It adds the temporar
 
 This action can be run when one or more tasks have the marker tag and one or more tasks or projects are selected.
 
-For each prerequisite/dependant pair, the `addDependency` function is run i.e. each selected task becomes a dependant of each tagged task.
+For each prerequisite/dependent pair, the `addDependency` function is run i.e. each selected task becomes a dependent of each tagged task.
 
 ## Remove Prerequisite(s)
 
 This action is available when one or more tasks or projects with prerequisite actions are selected.
 
-It prompts the user to select from a list of the tasks' prerequisite actions and removes the chosen prerequisite(s) from any selected tasks by using the `removeDependancy` function.
+It prompts the user to select from a list of the tasks' prerequisite actions and removes the chosen prerequisite(s) from any selected tasks by using the `removeDependency` function.
 
-## Remove Dependant(s)
+## Remove Dependent(s)
 
 This action is available when one or more tasks or projects with dependent actions are selected.
 
-It prompts the user to select from a list of the tasks' dependent actions and removes the chosen dependant(s) from any selected tasks by using the `removeDependancy` function.
+It prompts the user to select from a list of the tasks' dependent actions and removes the chosen dependent(s) from any selected tasks by using the `removeDependency` function.
 
 ## Go To Prerequisite
 
@@ -64,13 +64,13 @@ If there is only one prerequisite task, this action navigates to that task.
 
 If there is more than one prerequisite task, the user is first prompted to select which one they would like to navigate to.
 
-## Go To Dependant
+## Go To Dependent
 
-This action is available when a single task or project with one or more dependant actions is selected.
+This action is available when a single task or project with one or more dependent actions is selected.
 
-If there is only one dependant task, this action navigates to that task.
+If there is only one dependent task, this action navigates to that task.
 
-If there is more than one dependant task, the user is first prompted to select which one they would like to navigate to.
+If there is more than one dependent task, the user is first prompted to select which one they would like to navigate to.
 
 ## Check Prerequisites
 
@@ -102,7 +102,7 @@ There is a preference to select each of the tags outlined above. In addition, th
 
 * **Set due dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDueDates` is also run as part of the 'Check Prerequisites' action.
 * **Set defer dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDeferDates` is also run as part of the 'Check Prerequisites' action.
-* **Add link to related tasks to notes**. If this is selected, a link to the prerequisite task is added to the note of the dependant task when a new link is created, and vice versa. (Note that this setting does not change the notes for existing dependencies.)
+* **Add link to related tasks to notes**. If this is selected, a link to the prerequisite task is added to the note of the dependent task when a new link is created, and vice versa. (Note that this setting does not change the notes for existing dependencies.)
 
 # Functions
 
@@ -116,9 +116,9 @@ If the user does not have the plugin installed correctly, they are alerted.
 
 ## `getLinks () : Array<Array[string]>`
 
-Returns an array containing a list of dependancy pairs, as stored in the SyncedPref object for this plugin.
+Returns an array containing a list of dependency pairs, as stored in the SyncedPref object for this plugin.
 
-Each pair is stored as a two-element array: the first is the ID of the prerequisite task and the second is the ID of the dependant task.
+Each pair is stored as a two-element array: the first is the ID of the prerequisite task and the second is the ID of the dependent task.
 
 e.g. a sample return value might be `[["joAuGBEjN5C","gPTdVFqONl9"],["odwDCDRUWng","joAuGBEjN5C"],["oYQo_hRwCER","joAuGBEjN5C"],["dECOjinH-_3","joAuGBEjN5C"],["ptHMBTN7FMz","hhepNkpRFwh"]]`
 
@@ -127,10 +127,10 @@ If no links have been created yet, an empty array is returned.
 ## `addDependency (prereq: Task, dep: Task) : Promise`
 
 This asynchronous function:
-1. Adds the dependant tag to the dependant task and the prerequisite tag to the prerequisite task
-2. Prepends a link to the prerequisite tasks in the dependant task's note in the form `[ DEPENDANT: omnifocus:///task/<id> ] Task name`, and prepends a similar link to the dependant task's note. (This is not done if the option is deselected in preferences.)
+1. Adds the dependent tag to the dependent task and the prerequisite tag to the prerequisite task
+2. Prepends a link to the prerequisite tasks in the dependent task's note in the form `[ DEPENDANT: omnifocus:///task/<id> ] Task name`, and prepends a similar link to the dependent task's note. (This is not done if the option is deselected in preferences.)
 3. Saves a "link" in the SyncedPref object (see `getLinks` for details on how these are stored)
-4. If the dependant task has children, then the function is called again for either all children (in the case of a parallel action group) or the first child (in the case of a sequential action group).
+4. If the dependent task has children, then the function is called again for either all children (in the case of a parallel action group) or the first child (in the case of a sequential action group).
 5. Removes the marker tag from the prerequisite
 
 ## `removeDependency (prereqID: string, depID: string) : Promise`
@@ -138,19 +138,19 @@ This asynchronous function:
 This asynchronous function takes the ID of two tasks as input, and:
 1. Removes the "link" from the SyncedPref object (see `getLinks` for details on how these are stored)
 2. If the prerequisite task still exists:
-   * Removes the link to the dependant task from its note
-   * If there are no remaining dependancies, removes the prerequisite tag from the prerequisite task
-3. If the dependant task still exists:
+   * Removes the link to the dependent task from its note
+   * If there are no remaining dependencies, removes the prerequisite tag from the prerequisite task
+3. If the dependent task still exists:
     * Removes the link to the prerequisite task from its note
-    * If there are no remaining prerequisites, removes the dependant tag from the dependant task
-    * Runs `removeDependant` on all children (in the case of a parallel action group) or the first child (in the case of a sequential action group).
+    * If there are no remaining prerequisites, removes the dependent tag from the dependent task
+    * Runs `removeDependent` on all children (in the case of a parallel action group) or the first child (in the case of a sequential action group).
 
 
 ## `getPrefTag(prefTag: string) : Promise<Tag>`
 
-This asynchronous function takes the name of a preference tag (`markerTag`, `prerequisiteTag` or `dependantTag`) as input and, if the tag ID is set in preferences, returns the tag. If no preference has been set, the `Preferences` action is run and then the function is called again.
+This asynchronous function takes the name of a preference tag (`markerTag`, `prerequisiteTag` or `dependentTag`) as input and, if the tag ID is set in preferences, returns the tag. If no preference has been set, the `Preferences` action is run and then the function is called again.
 
-## `getDependants (task: Task) : Array<Task>`
+## `getDependents (task: Task) : Array<Task>`
 
 This function takes a task object as input, and returns an array of its (direct) dependent tasks. If it has no dependent tasks, it returns an empty array.
 
@@ -162,9 +162,9 @@ This function takes a task object as input, and returns an array of its (direct)
 
 This function takes a task object as input, and returns an array of its prerequisites, both direct and indirect. i.e. if T1 is a prerequisite of T2 and T2 is a prerequisite of T3, then passing T3 as a parameter would return an array containing both T1 and T2.
 
-## `getAllDependants (task: Task) : Array<Task>`
+## `getAllDependents (task: Task) : Array<Task>`
 
-This function takes a task object as input, and returns an array of its dependants, both direct and indirect. i.e. if T1 is a prerequisite of T2 and T2 is a prerequisite of T3, then passing T1 as a parameter would return an array containing both T2 and T3.
+This function takes a task object as input, and returns an array of its dependents, both direct and indirect. i.e. if T1 is a prerequisite of T2 and T2 is a prerequisite of T3, then passing T1 as a parameter would return an array containing both T2 and T3.
 
 ## `updateDependencies ()`
 
@@ -172,8 +172,8 @@ This asynchronous function goes through the links stored in the SyncedPref objec
 
 ## `updateDueDates ()`
 
-For each dependant task, this asynchronous function finds all prerequisites (direct and indirect) using the `getAllPrerequisites` function. For each prerequisite, it then updates the due date if there is no effective due date set, or if the currently set due date is _after_ the dependant's due date. It also updates any sequential actions that precede the prerequisite task.
+For each dependent task, this asynchronous function finds all prerequisites (direct and indirect) using the `getAllPrerequisites` function. For each prerequisite, it then updates the due date if there is no effective due date set, or if the currently set due date is _after_ the dependent's due date. It also updates any sequential actions that precede the prerequisite task.
 
 ## `updateDeferDates ()`
 
-For each prerequisite task, this asynchronous function finds all dependants (direct and indirect) using the `getAllDependants` function. For each dependant, it then updates the defer date if there is no effective defer date set, or if the currently set defer date is _before_ the prerequisite's defer date. It also updates any sequential actions that follow the dependant task.
+For each prerequisite task, this asynchronous function finds all dependents (direct and indirect) using the `getAllDependents` function. For each dependent, it then updates the defer date if there is no effective defer date set, or if the currently set defer date is _before_ the prerequisite's defer date. It also updates any sequential actions that follow the dependent task.

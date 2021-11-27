@@ -22,21 +22,21 @@
     return syncedPrefs.read('links') || []
   }
 
-  dependencyLibrary.addDependancy = async (prereq, dep) => {
+  dependencyLibrary.addDependency = async (prereq, dep) => {
     const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
     const links = dependencyLibrary.getLinks()
     const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
-    const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
+    const dependentTag = await dependencyLibrary.getPrefTag('dependentTag')
     const markerTag = await dependencyLibrary.getPrefTag('markerTag')
 
     // add tags
-    dep.addTag(dependantTag)
+    dep.addTag(dependentTag)
     prereq.addTag(prerequisiteTag)
 
-    // if dependant is project, set to on hold
+    // if dependent is project, set to on hold
     if (dep.project !== null) dep.project.status = Project.Status.OnHold
 
-    // prepend dependancy details to notes if that setting is selected
+    // prepend dependency details to notes if that setting is selected
     const addToNote = (syncedPrefs.read('addToNote') !== null) ? syncedPrefs.readBoolean('addToNote') : true
     if (addToNote) {
       dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
@@ -47,16 +47,16 @@
     links.push([prereq.id.primaryKey, dep.id.primaryKey, new Date()])
     syncedPrefs.write('links', links)
 
-    // if dependant task has children:
+    // if dependent task has children:
     if (dep.hasChildren && dep.sequential) dependencyLibrary.addDependency(dep.children[0])
-    if (dep.hasChildren && !dep.sequential) dep.children.forEach(child => dependencyLibrary.addDependancy(prereq, child))
+    if (dep.hasChildren && !dep.sequential) dep.children.forEach(child => dependencyLibrary.addDependency(prereq, child))
 
     // remove marker tag used for processing
     prereq.removeTag(markerTag)
   }
 
-  dependencyLibrary.removeDependancy = async (prereqID, depID) => {
-    const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
+  dependencyLibrary.removeDependency = async (prereqID, depID) => {
+    const dependentTag = await dependencyLibrary.getPrefTag('dependentTag')
     const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
     const prereq = Task.byIdentifier(prereqID)
     const dep = Task.byIdentifier(depID)
@@ -75,8 +75,8 @@
       const regexForNoteSearch1 = new RegExp(RegExp.quote(regexString1), 'g')
       prereq.note = prereq.note.replace(regexForNoteSearch1, '')
 
-      // if no remaining dependancies, remove tag from prereq task
-      const deps = await dependencyLibrary.getDependants(prereq)
+      // if no remaining dependencies, remove tag from prereq task
+      const deps = await dependencyLibrary.getDependents(prereq)
       if (deps.length === 0) {
         prereq.removeTag(prerequisiteTag)
       }
@@ -90,16 +90,16 @@
       const regexForNoteSearch2 = new RegExp(RegExp.quote(regexString2), 'g')
       dep.note = dep.note.replace(regexForNoteSearch2, '')
 
-      // if no remaining prerequisites, remove tag from dependant task (and if project set to active)
+      // if no remaining prerequisites, remove tag from dependent task (and if project set to active)
       const prereqs = await dependencyLibrary.getPrereqs(dep)
       if (prereqs.length === 0) {
-        dep.removeTag(dependantTag)
+        dep.removeTag(dependentTag)
         if (dep.project !== null) dep.project.status = Project.Status.Active
       }
 
       // if dep has children also run on those
-      if (dep.hasChildren && dep.sequential) dependencyLibrary.removeDependancy(dep.children[0], prereq)
-      else if (dep.hasChildren) dep.children.forEach(child => dependencyLibrary.removeDependancy(child, prereq))
+      if (dep.hasChildren && dep.sequential) dependencyLibrary.removeDependency(dep.children[0], prereq)
+      else if (dep.hasChildren) dep.children.forEach(child => dependencyLibrary.removeDependency(child, prereq))
     }
   }
 
@@ -114,7 +114,7 @@
     return dependencyLibrary.getPrefTag(prefTag)
   }
 
-  dependencyLibrary.getDependants = (task) => {
+  dependencyLibrary.getDependents = (task) => {
     const links = dependencyLibrary.getLinks()
     return links.filter(link => link[0] === task.id.primaryKey).map(link => Task.byIdentifier(link[1]))
   }
@@ -136,19 +136,19 @@
     return getAllPrereqs(firstPrereqs)
   }
 
-  dependencyLibrary.getAllDependants = (task) => {
-    const getAllDependants = (tasks) => {
-      const deps = tasks.flatMap(task => dependencyLibrary.getDependants(task))
+  dependencyLibrary.getAllDependents = (task) => {
+    const getAllDependents = (tasks) => {
+      const deps = tasks.flatMap(task => dependencyLibrary.getDependents(task))
       if (deps.length === 0) return tasks
-      return getAllDependants(deps).concat(tasks)
+      return getAllDependents(deps).concat(tasks)
     }
 
-    const firstDeps = dependencyLibrary.getDependants(task)
+    const firstDeps = dependencyLibrary.getDependents(task)
 
-    return getAllDependants(firstDeps)
+    return getAllDependents(firstDeps)
   }
 
-  dependencyLibrary.updateDependancies = async () => {
+  dependencyLibrary.updateDependencies = async () => {
     const links = dependencyLibrary.getLinks()
 
     // get links where one or both of the values has been completed, dropped, or no longer exists
@@ -166,27 +166,27 @@
       return prereq === null || dep === null || prereq.taskStatus === Task.Status.Completed || prereq.taskStatus === Task.Status.Dropped || dep.taskStatus === Task.Status.Completed || dep.taskStatus === Task.Status.Dropped || (prereq.repetitionRule !== null && date !== null && lastInstance(prereq).completionDate > date)
     })
 
-    linksToRemove.forEach(link => dependencyLibrary.removeDependancy(link[0], link[1]))
+    linksToRemove.forEach(link => dependencyLibrary.removeDependency(link[0], link[1]))
 
     // check tasks tagged with 'dependent' or 'prerequisite' and if they are not included in links, remove tag
     const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
     prerequisiteTag.tasks.forEach(async task => {
-      const deps = await dependencyLibrary.getDependants(task)
+      const deps = await dependencyLibrary.getDependents(task)
       if (deps.length === 0) task.removeTag(prerequisiteTag)
     })
 
-    const dependantTag = await dependencyLibrary.getPrefTag('dependantTag')
-    dependantTag.tasks.forEach(async task => {
+    const dependentTag = await dependencyLibrary.getPrefTag('dependentTag')
+    dependentTag.tasks.forEach(async task => {
       const prereqs = await dependencyLibrary.getPrereqs(task)
-      if (prereqs.length === 0) task.removeTag(dependantTag)
+      if (prereqs.length === 0) task.removeTag(dependentTag)
     })
   }
 
   dependencyLibrary.updateDueDates = async () => {
     // make sure any old links have been cleared out
-    await dependencyLibrary.updateDependancies()
+    await dependencyLibrary.updateDependencies()
 
-    // get all dependant tasks
+    // get all dependent tasks
     const deps = dependencyLibrary.getLinks().map(link => Task.byIdentifier(link[1]))
 
     // limit to those with due dates
@@ -218,7 +218,7 @@
 
   dependencyLibrary.updateDeferDates = async () => {
     // make sure any old links have been cleared out
-    await dependencyLibrary.updateDependancies()
+    await dependencyLibrary.updateDependencies()
 
     // get all prerequisite tasks
     const prereqs = dependencyLibrary.getLinks().map(link => Task.byIdentifier(link[0]))
@@ -236,8 +236,8 @@
     }
 
     deferredPrereqs.forEach(prereq => {
-      // get a complete list of dependants (including indirect ones) and update the date
-      const deps = dependencyLibrary.getAllDependants(prereq)
+      // get a complete list of dependents (including indirect ones) and update the date
+      const deps = dependencyLibrary.getAllDependents(prereq)
       if (prereq.id.primaryKey === 'jBlljdtdlfB') console.log(deps)
       const updatedDeps = updateDate(deps, prereq.effectiveDeferDate)
 

@@ -4,13 +4,13 @@
     // configure tags
     const markerTag = await this.dependencyLibrary.getPrefTag('markerTag')
 
-    const dependantTasks = Array.from(selection.tasks).concat(Array.from(selection.projects).map(p => p.task))
+    const deps = Array.from(selection.tasks).concat(Array.from(selection.projects).map(p => p.task))
 
     // get all tasks tagged with 'prerequisite'
     const prereqTasks = Array.from(markerTag.tasks)
 
-    // add all selected tasks as dependants
-    prereqTasks.forEach((prereq) => dependantTasks.forEach(async (dep) => await this.dependencyLibrary.addDependancy(prereq, dep)))
+    // add all selected tasks as dependents
+    prereqTasks.forEach((prereq) => deps.forEach(async (dep) => await this.dependencyLibrary.addDependancy(prereq, dep)))
   })
 
   action.validate = async function (selection, sender) {

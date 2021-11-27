@@ -10,8 +10,8 @@
     selection.tasks.forEach(task => task.markComplete())
     selection.projects.forEach(project => project.markComplete())
 
-    // check dependants
-    await this.dependencyLibrary.updateDependancies()
+    // check dependents
+    await this.dependencyLibrary.updateDependencies()
   })
 
   action.validate = function (selection, sender) {
