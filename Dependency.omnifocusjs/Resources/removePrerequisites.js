@@ -11,7 +11,7 @@
     form.addField(new Form.Field.MultipleOptions('prereqsToRemove', 'Prerequisites To Remove', uniquePrereqs, uniquePrereqs.map(p => p.name), uniquePrereqs.length === 1 ? uniquePrereqs : []))
     await form.show('Remove Prerequisite(s)', 'OK')
 
-    form.values.prereqsToRemove.forEach(prereq => selected.forEach(async selected => await this.dependencyLibrary.removeDependancy(prereq.id.primaryKey, selected.id.primaryKey)))
+    form.values.prereqsToRemove.forEach(prereq => selected.forEach(async selected => await this.dependencyLibrary.removeDependency(prereq.id.primaryKey, selected.id.primaryKey)))
   })
 
   action.validate = function (selection, sender) {

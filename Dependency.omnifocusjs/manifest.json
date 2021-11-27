@@ -18,7 +18,7 @@
       "image": "delete.left.fill"
     },
     {
-      "identifier": "removeDependants",
+      "identifier": "removeDependents",
       "image": "delete.right.fill"
     },
     {
@@ -26,7 +26,7 @@
       "image": "chevron.left.square.fill"
     },
     {
-      "identifier": "goToDependant",
+      "identifier": "goToDependent",
       "image": "chevron.right.square.fill"
     },
     {
