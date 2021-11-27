@@ -44,7 +44,7 @@
     }
 
     // save link in synced prefs
-    links.push([prereq.id.primaryKey, dep.id.primaryKey])
+    links.push([prereq.id.primaryKey, dep.id.primaryKey, new Date()])
     syncedPrefs.write('links', links)
 
     // if dependant task has children:
@@ -153,10 +153,17 @@
 
     // get links where one or both of the values has been completed, dropped, or no longer exists
     const linksToRemove = links.filter(link => {
-      const [prereqID, depID] = link
-      const [prereq, dep] = [Task.byIdentifier(prereqID), Task.byIdentifier(depID)]
+      const [prereqID, depID, dateString=''] = link
+      const [prereq, dep, date] = [Task.byIdentifier(prereqID), Task.byIdentifier(depID), new Date(dateString)]
 
-      return prereq === null || dep === null || prereq.taskStatus === Task.Status.Completed || prereq.taskStatus === Task.Status.Dropped || dep.taskStatus === Task.Status.Completed || dep.taskStatus === Task.Status.Dropped
+      const lastInstance = (task) => {
+          // returns latest instance of a repeating task, or current instance if no previous instances
+          const instances = flattenedTasks.filter(t => t.id.primaryKey.includes(task.id.primaryKey))
+          const last = instances.sort((a, b) => b.id.primaryKey.split('.')[1] - a.id.primaryKey.split('.')[1])[0]
+          return last
+      }
+
+      return prereq === null || dep === null || prereq.taskStatus === Task.Status.Completed || prereq.taskStatus === Task.Status.Dropped || dep.taskStatus === Task.Status.Completed || dep.taskStatus === Task.Status.Dropped || (prereq.repetitionRule !== null && date !== null && lastInstance(prereq).completionDate > date)
     })
 
     linksToRemove.forEach(link => dependencyLibrary.removeDependancy(link[0], link[1]))
