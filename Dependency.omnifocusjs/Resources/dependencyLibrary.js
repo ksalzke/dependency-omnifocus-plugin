@@ -100,7 +100,7 @@
     syncedPrefs.write('links', updated)
 
     // remove notes
-    dependencyLibrary.removeNote(prereq, dep)
+    dependencyLibrary.removeNotes(prereq, dep)
 
     // update prereq task if it still exists
     if (prereq !== null) {
