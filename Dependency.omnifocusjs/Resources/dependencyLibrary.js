@@ -22,6 +22,11 @@
     return syncedPrefs.read('links') || []
   }
 
+  dependencyLibrary.addNote = (prereq, dep) => {
+    dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
+    prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
+  }
+
   dependencyLibrary.addDependency = async (prereq, dep) => {
     const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
     const links = dependencyLibrary.getLinks()
@@ -38,10 +43,7 @@
 
     // prepend dependency details to notes if that setting is selected
     const addToNote = (syncedPrefs.read('addToNote') !== null) ? syncedPrefs.readBoolean('addToNote') : true
-    if (addToNote) {
-      dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
-      prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
-    }
+    if (addToNote) dependencyLibrary.addNote(prereq, dep)
 
     // save link in synced prefs
     links.push([prereq.id.primaryKey, dep.id.primaryKey, new Date()])
@@ -54,6 +56,10 @@
     // remove marker tag used for processing
     prereq.removeTag(markerTag)
   }
+
+  dependencyLibrary.removeAllNotes
+
+
 
   dependencyLibrary.removeDependency = async (prereqID, depID) => {
     const dependentTag = await dependencyLibrary.getPrefTag('dependentTag')
