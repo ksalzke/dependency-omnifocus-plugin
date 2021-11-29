@@ -22,9 +22,39 @@
     return syncedPrefs.read('links') || []
   }
 
-  dependencyLibrary.addNote = (prereq, dep) => {
+  dependencyLibrary.addNotes = (prereq, dep) => {
     dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
     prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
+  }
+
+  dependencyLibrary.removeNotes = (prereq, dep) => {
+    if (dep !== null) {
+      // remove prereq from dep note
+      const regexString2 = `[ ?PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ?].+`
+      RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
+      const regexForNoteSearch2 = new RegExp(RegExp.quote(regexString2), 'g')
+      dep.note = dep.note.replace(regexForNoteSearch2, '')
+    }
+
+    if (prereq !== null) {
+      // remove dep from prereq note
+      const regexString1 = `[ ?DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ?].+`
+      RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
+      const regexForNoteSearch1 = new RegExp(RegExp.quote(regexString1), 'g')
+      prereq.note = prereq.note.replace(regexForNoteSearch1, '')
+    }
+  }
+
+  dependencyLibrary.removeAllNotes = () => {
+    console.log('removing all notes')
+    const links = dependencyLibrary.getLinks()
+    links.forEach(link => dependencyLibrary.removeNotes(Task.byIdentifier(link[0]), Task.byIdentifier(link[1])))
+  }
+
+  dependencyLibrary.addAllNotes = () => {
+    console.log('adding all notes')
+    const links = dependencyLibrary.getLinks()
+    links.forEach(link => dependencyLibrary.addNotes(Task.byIdentifier(link[0]), Task.byIdentifier(link[1])))
   }
 
   dependencyLibrary.addDependency = async (prereq, dep) => {
@@ -43,7 +73,7 @@
 
     // prepend dependency details to notes if that setting is selected
     const addToNote = (syncedPrefs.read('addToNote') !== null) ? syncedPrefs.readBoolean('addToNote') : true
-    if (addToNote) dependencyLibrary.addNote(prereq, dep)
+    if (addToNote) dependencyLibrary.addNotes(prereq, dep)
 
     // save link in synced prefs
     links.push([prereq.id.primaryKey, dep.id.primaryKey, new Date()])
@@ -57,10 +87,6 @@
     prereq.removeTag(markerTag)
   }
 
-  dependencyLibrary.removeAllNotes
-
-
-
   dependencyLibrary.removeDependency = async (prereqID, depID) => {
     const dependentTag = await dependencyLibrary.getPrefTag('dependentTag')
     const prerequisiteTag = await dependencyLibrary.getPrefTag('prerequisiteTag')
@@ -73,14 +99,11 @@
     const updated = links.filter(link => !(link[0] === prereqID && link[1] === depID))
     syncedPrefs.write('links', updated)
 
+    // remove notes
+    dependencyLibrary.removeNotes(prereq, dep)
+
     // update prereq task if it still exists
     if (prereq !== null) {
-      // remove dep from prereq note
-      const regexString1 = `[ ?DEPENDANT: omnifocus:///task/${depID} ?].+`
-      RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
-      const regexForNoteSearch1 = new RegExp(RegExp.quote(regexString1), 'g')
-      prereq.note = prereq.note.replace(regexForNoteSearch1, '')
-
       // if no remaining dependencies, remove tag from prereq task
       const deps = await dependencyLibrary.getDependents(prereq)
       if (deps.length === 0) {
@@ -90,12 +113,6 @@
 
     // update dep task if it still exists
     if (dep !== null) {
-      // remove prereq from dep note
-      const regexString2 = `[ ?PREREQUISITE: omnifocus:///task/${prereqID} ?].+`
-      RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
-      const regexForNoteSearch2 = new RegExp(RegExp.quote(regexString2), 'g')
-      dep.note = dep.note.replace(regexForNoteSearch2, '')
-
       // if no remaining prerequisites, remove tag from dependent task (and if project set to active)
       const prereqs = await dependencyLibrary.getPrereqs(dep)
       if (prereqs.length === 0) {

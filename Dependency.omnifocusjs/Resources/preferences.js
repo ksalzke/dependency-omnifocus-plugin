@@ -29,6 +29,16 @@
     syncedPrefs.write('updateDates', form.values.updateDates)
     syncedPrefs.write('updateDeferDates', form.values.updateDeferDates)
     syncedPrefs.write('addToNote', form.values.addToNote)
+
+    // update notes if this setting has changed
+    if (addToNote && !form.values.addToNote) {
+      console.log('should be removing all notes')
+      this.dependencyLibrary.removeAllNotes()
+    }
+    else if (!addToNote && form.values.addToNote) {
+      console.log('should be adding all notes')
+      this.dependencyLibrary.addAllNotes()
+    }
   })
 
   action.validate = function (selection, sender) {
