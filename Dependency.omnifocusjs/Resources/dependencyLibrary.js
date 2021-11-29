@@ -26,25 +26,29 @@
     // remove note before adding - prevents note being added twice
     dependencyLibrary.removeNotes (prereq, dep)
 
-    dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
-    prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
+    dep.note = `[ Go to prerequisite task: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
+    prereq.note = `[ Go to dependent task: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
   }
 
   dependencyLibrary.removeNotes = (prereq, dep) => {
+    RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
+
     if (dep !== null) {
       // remove prereq from dep note
-      const regexString2 = `[ ?PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ?].+`
-      RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
+      const regexString1 = `[ ?PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ?].+`
+      const regexString2 = `[ ?Go to prerequisite task: omnifocus:///task/${prereq.id.primaryKey} ?].+`
+      const regexForNoteSearch1 = new RegExp(RegExp.quote(regexString1), 'g')
       const regexForNoteSearch2 = new RegExp(RegExp.quote(regexString2), 'g')
-      dep.note = dep.note.replace(regexForNoteSearch2, '')
+      dep.note = dep.note.replace(regexForNoteSearch1, '').replace(regexForNoteSearch2, '')
     }
 
     if (prereq !== null) {
       // remove dep from prereq note
       const regexString1 = `[ ?DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ?].+`
-      RegExp.quote = (str) => str.replace(/([*^$[\]\\(){}|-])/g, '\\$1')
+      const regexString2 = `[ ?Go to dependent task): omnifocus:///task/${dep.id.primaryKey} ?].+`
       const regexForNoteSearch1 = new RegExp(RegExp.quote(regexString1), 'g')
-      prereq.note = prereq.note.replace(regexForNoteSearch1, '')
+      const regexForNoteSearch2 = new RegExp(RegExp.quote(regexString2), 'g')
+      prereq.note = prereq.note.replace(regexForNoteSearch1, '').replace(regexForNoteSearch2, '')
     }
   }
 
