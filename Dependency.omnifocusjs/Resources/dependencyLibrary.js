@@ -23,6 +23,9 @@
   }
 
   dependencyLibrary.addNotes = (prereq, dep) => {
+    // remove note before adding - prevents note being added twice
+    dependencyLibrary.removeNotes (prereq, dep)
+
     dep.note = `[ PREREQUISITE: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
     prereq.note = `[ DEPENDANT: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
   }
