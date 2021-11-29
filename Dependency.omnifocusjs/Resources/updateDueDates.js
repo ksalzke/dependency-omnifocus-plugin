@@ -5,7 +5,10 @@
   })
 
   action.validate = function (selection, sender) {
-    // only valid if nothing is selected - so does not show in share menu
+    // always available on Mac
+    if (Device.current.mac) return true
+
+    // otherwise only valid if nothing is selected - so does not show in share menu
     return selection.tasks.length === 0 && selection.projects.length === 0
   }
 
