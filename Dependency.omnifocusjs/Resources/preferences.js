@@ -32,7 +32,10 @@
   })
 
   action.validate = function (selection, sender) {
-    // only show when nothing is selected
+    // always available on Mac
+    if (Device.current.mac) return true
+
+    // otherwise only show when nothing is selected
     return selection.tasks.length === 0 && selection.projects.length === 0
   }
 
