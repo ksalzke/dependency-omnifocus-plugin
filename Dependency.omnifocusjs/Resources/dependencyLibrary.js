@@ -149,7 +149,11 @@
   }
 
   dependencyLibrary.updateDependencies = async () => {
-    const links = dependencyLibrary.getLinks()
+    // remove duplicates
+    const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
+    const linksWithDuplicates = dependencyLibrary.getLinks().map(link => [link[0], link[1]])
+    const links = Array.from(new Set(linksWithDuplicates.map(JSON.stringify)), JSON.parse)
+    syncedPrefs.write('links', links)
 
     // get links where one or both of the values has been completed, dropped, or no longer exists
     const linksToRemove = links.filter(link => {
