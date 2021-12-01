@@ -53,13 +53,11 @@
   }
 
   dependencyLibrary.removeAllNotes = () => {
-    console.log('removing all notes')
     const links = dependencyLibrary.getLinks()
     links.forEach(link => dependencyLibrary.removeNotes(Task.byIdentifier(link[0]), Task.byIdentifier(link[1])))
   }
 
   dependencyLibrary.addAllNotes = () => {
-    console.log('adding all notes')
     const links = dependencyLibrary.getLinks()
     links.forEach(link => dependencyLibrary.addNotes(Task.byIdentifier(link[0]), Task.byIdentifier(link[1])))
   }
