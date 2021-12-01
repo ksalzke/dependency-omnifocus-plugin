@@ -18,7 +18,7 @@ Changes to the way data from this plugin is stored were made in version 3. If yo
 2. Unzip the downloaded file.
 3. Move the `.omnifocusjs` file to your OmniFocus plug-in library folder (or open it to install).
 4. Manually create the three tags below in OmniFocus. (These can be placed anywhere in your OmniFocus database.)
-5. Configure your preferences using the `Preferences` action. (Note that to run this action, no tasks can be selected.)
+5. Configure your preferences using the `Preferences` action. (Note that to run this action on iOS, no tasks can be selected.)
 
 The plugin makes use of three tags:
 
@@ -37,6 +37,8 @@ This plug-in contains the following actions:
 ## Add Prerequisite Marker
 
 This action can be run when one or more tasks are selected. It adds the temporary marker tag to the selected task(s) in preparation for the `Add Prerequisite` step.
+
+The tag can also be manually added, however this action is included to allow a keyboard shortcut to be easily assigned to this tag.
 
 ## Add Prerequisite
 
@@ -74,11 +76,13 @@ If there is more than one dependent task, the user is first prompted to select w
 
 ## Check Prerequisites
 
-This action can be run when no tasks or projects are selected.
+This action can only be run when no tasks or projects are selected on iOS (to avoid taking space in the share sheet). It is always available on macOS.
 
 It reviews all the dependencies and updates them as needed by running `updateDependencies`.
 
 If the preference to "Set due dates when updating 'Check Prerequisites' action" has been selected, then `updateDueDates` is also run.
+
+If the preference to "Set defer dates when updating 'Check Prerequisites' action" has been selected, then `updateDeferDates` is also run.
 
 ## Complete For Prerequisites
 
@@ -102,7 +106,7 @@ There is a preference to select each of the tags outlined above. In addition, th
 
 * **Set due dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDueDates` is also run as part of the 'Check Prerequisites' action.
 * **Set defer dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDeferDates` is also run as part of the 'Check Prerequisites' action.
-* **Add link to related tasks to notes**. If this is selected, a link to the prerequisite task is added to the note of the dependent task when a new link is created, and vice versa. (Note that this setting does not change the notes for existing dependencies.)
+* **Add link to related tasks to notes**. If this is selected, a link to the prerequisite task is added to the note of the dependent task when a new link is created, and vice versa. (Note that changing this setting will add or remove notes from all tasks.)
 
 # Functions
 
@@ -123,6 +127,24 @@ Each pair is stored as a two-element array: the first is the ID of the prerequis
 e.g. a sample return value might be `[["joAuGBEjN5C","gPTdVFqONl9"],["odwDCDRUWng","joAuGBEjN5C"],["oYQo_hRwCER","joAuGBEjN5C"],["dECOjinH-_3","joAuGBEjN5C"],["ptHMBTN7FMz","hhepNkpRFwh"]]`
 
 If no links have been created yet, an empty array is returned.
+
+## `addNotes (prereq: Task, dep: Task)`
+
+This function creates a note 'link' between the two tasks. The notes have the form `[ Go to prerequisite task: omnifocus:///task/someid123 ] Task name` and `[ Go to dependent task: omnifocus:///task/someid123 ] Task name`
+
+Before creating the new notes, it removes any existing notes linking the two tasks using the `removeNotes` function. This is to avoid the same note 'link' being entered twice.
+
+## `removeNotes (prereq: Task, dep: Task)`
+
+This function removes the note 'link' between the two tasks. This includes those in the form specified above, as well as some other forms previously used by this plugin.
+
+## `removeAllNotes ()`
+
+This function runs `removeNotes` for all links.
+
+## `addAllNotes ()`
+
+This function runs `addNotes` for all links.
 
 ## `addDependency (prereq: Task, dep: Task) : Promise`
 
@@ -168,7 +190,9 @@ This function takes a task object as input, and returns an array of its dependen
 
 ## `updateDependencies ()`
 
-This asynchronous function goes through the links stored in the SyncedPref object, and for any link where one or both of the values has been completed, dropped, or no longer exists, runs the `removeDependency` function.
+This asynchronous function goes through the links stored in the SyncedPref object, removes any duplicates, and for any link where one or both of the values has been completed, dropped, or no longer exists, runs the `removeDependency` function.
+
+It also checks for any tasks that have been tagged with the dependent or prerequisite tags but are not saved as such (most likely to occur when tags are inherited in a project or action group). It removes these tags from the task.
 
 ## `updateDueDates ()`
 
