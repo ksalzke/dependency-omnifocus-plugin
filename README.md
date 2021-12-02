@@ -44,7 +44,11 @@ The tag can also be manually added, however this action is included to allow a k
 
 This action can be run when one or more tasks have the marker tag and one or more tasks or projects are selected.
 
-For each prerequisite/dependent pair, the `addDependency` function is run i.e. each selected task becomes a dependent of each tagged task.
+For each prerequisite/dependent pair, the `addDependency` function is run i.e. each selected task becomes a dependent of each tagged task: the relevant tags are applied, and, if the option is selected, links are added to the notes.
+
+![Running 'Add Prerequisite Marker' and 'Add Prerequisite' actions](https://user-images.githubusercontent.com/16893787/144363268-f488e45c-30a7-461d-baa7-f6a2c8c02c35.mp4)
+
+<img width="541" alt="Example note" src="https://user-images.githubusercontent.com/16893787/144363485-eb9d4e6a-a9d6-4af3-9b97-46ed23c9b31b.png">
 
 ## Remove Prerequisite(s)
 
@@ -52,11 +56,15 @@ This action is available when one or more tasks or projects with prerequisite ac
 
 It prompts the user to select from a list of the tasks' prerequisite actions and removes the chosen prerequisite(s) from any selected tasks by using the `removeDependency` function.
 
+![Capto_Capture 2021-12-02_04-33-19_pm](https://user-images.githubusercontent.com/16893787/144363689-87538bd2-baff-4ebf-8d80-12ddbd83cbac.png)
+
 ## Remove Dependent(s)
 
 This action is available when one or more tasks or projects with dependent actions are selected.
 
 It prompts the user to select from a list of the tasks' dependent actions and removes the chosen dependent(s) from any selected tasks by using the `removeDependency` function.
+
+![Capto_Capture 2021-12-02_04-32-28_pm](https://user-images.githubusercontent.com/16893787/144363609-5e437687-6316-4134-9968-c73cb857b7ad.png)
 
 ## Go To Prerequisite
 
@@ -89,6 +97,8 @@ If the preference to "Set defer dates when updating 'Check Prerequisites' action
 This action can be run when one or more tasks or projects are selected.
 
 It marks the selected tasks or projects as complete and runs the `updateDependencies` function, to make any tasks that were waiting on selected tasks (or completed parent tasks) available.
+
+![Complete For Prerequisite](https://user-images.githubusercontent.com/16893787/144363891-00434559-da7b-4dc1-bc84-cd587c9e8e63.mp4)
 
 ## Update Due Dates
 
