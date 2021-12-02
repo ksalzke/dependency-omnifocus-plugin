@@ -1,3 +1,37 @@
+# [4.0.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.6.0...v4.0.0) (2021-12-02)
+
+
+### Bug Fixes
+
+* 'remove' now removes doubled-up links ([db2945f](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/db2945f59a1c76b1ecae59b467ed505134f4969e)), closes [#13](https://github.com/ksalzke/dependency-omnifocus-plugin/issues/13)
+* enable repeating tasks to be used as prerequisites ([bd8d3f5](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/bd8d3f5561d07ba2bfa7ff3251c602bccdd50d26)), closes [#12](https://github.com/ksalzke/dependency-omnifocus-plugin/issues/12)
+
+
+### Code Refactoring
+
+* make spelling of 'dependent' consistent (except notes) ([105fa32](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/105fa32c0fd28057140efce29cdfd72cfb83962d)), closes [#20](https://github.com/ksalzke/dependency-omnifocus-plugin/issues/20)
+
+
+### Features
+
+* add addNote function ([198b9ae](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/198b9ae1be1e918f73c47bdf4b4f6d63044cb371))
+* always show 'Check Prerequisites', 'Preferences', 'Update Defer Dates' and 'Update Due Dates' actions on macOS ([c2d6de9](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/c2d6de9218b04304fc2afc9053a32a2c381a7196))
+* create/remove notes when 'add notes' preference changed ([376fb00](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/376fb00904ac0af086e47a4013f18f1b7cbadb0a))
+* prevent same note being added twice ([a0b2db8](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/a0b2db81832ed71b212e1af167696ad0e4762fe0))
+* remove dependant and prerequisite tags when no longer applicable ([4765503](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/4765503d48d3fc459d06693fb7319d6640866b21)), closes [#17](https://github.com/ksalzke/dependency-omnifocus-plugin/issues/17)
+* remove duplicates as part of updateDependencies() ([9874ced](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/9874ced76eece504fb17a89a3aae3a9c42b86f62))
+* reword link in notes to be clearer ([c047639](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/c0476395da0b01575cda1979537e98994ee0b468)), closes [#19](https://github.com/ksalzke/dependency-omnifocus-plugin/issues/19)
+
+
+### BREAKING CHANGES
+
+* The spelling of 'dependant' has been changed to 'dependent' for several functions and actions.
+* updateDependancies, updateDueDates and updateDeferDates functions now asynchronous
+
+fix direction of check for deleting items with tag
+
+
+
 # [3.6.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.5.0...v3.6.0) (2021-11-22)
 
 
