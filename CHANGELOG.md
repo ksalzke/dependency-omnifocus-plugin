@@ -1,3 +1,12 @@
+# [4.1.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.0.0...v4.1.0) (2022-01-25)
+
+
+### Features
+
+* :sparkles: add 'prompt for additional tasks to be added' as an optional setting ([cf89a7a](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/cf89a7a1925e55ef6db83fbaec2307003d4fd5c9)), closes [#23](https://github.com/ksalzke/dependency-omnifocus-plugin/issues/23)
+
+
+
 # [4.0.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v3.6.0...v4.0.0) (2021-12-02)
 
 
