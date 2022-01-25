@@ -46,6 +46,8 @@ This action can be run when one or more tasks have the marker tag and one or mor
 
 For each prerequisite/dependent pair, the `addDependency` function is run i.e. each selected task becomes a dependent of each tagged task: the relevant tags are applied, and, if the option is selected, links are added to the notes.
 
+Optionally, the user may choose to be prompted to add another dependent task. (This avoids having to re-apply the 'marker' tag to any prerequisite tasks.)
+
 ![Running 'Add Prerequisite Marker' and 'Add Prerequisite' actions](https://user-images.githubusercontent.com/16893787/144363268-f488e45c-30a7-461d-baa7-f6a2c8c02c35.mp4)
 
 <img width="541" alt="Example note" src="https://user-images.githubusercontent.com/16893787/144363485-eb9d4e6a-a9d6-4af3-9b97-46ed23c9b31b.png">
@@ -117,6 +119,7 @@ There is a preference to select each of the tags outlined above. In addition, th
 * **Set due dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDueDates` is also run as part of the 'Check Prerequisites' action.
 * **Set defer dates when updating 'Check Prerequisites' action**. If this is selected, then `updateDeferDates` is also run as part of the 'Check Prerequisites' action.
 * **Add link to related tasks to notes**. If this is selected, a link to the prerequisite task is added to the note of the dependent task when a new link is created, and vice versa. (Note that changing this setting will add or remove notes from all tasks.)
+* **Prompt for additional tasks to be added (leaves marker tag applied)** If this is selected, the user is asked whether they would like to add additional tasks after running the 'Add Prerequisite' action. (This avoids having to re-apply the 'marker' tag to any prerequisite tasks.)
 
 # Functions
 

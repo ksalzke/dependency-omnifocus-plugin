@@ -1,6 +1,7 @@
 /* global PlugIn */
 (() => {
   const action = new PlugIn.Action(async function (selection, sender) {
+
     // configure tags
     const markerTag = await this.dependencyLibrary.getPrefTag('markerTag')
 
@@ -11,6 +12,15 @@
 
     // add all selected tasks as dependents
     prereqTasks.forEach((prereq) => deps.forEach(async (dep) => await this.dependencyLibrary.addDependency(prereq, dep)))
+
+    // show prompt re whether there are more tasks to be linked, if option is set
+    const syncedPrefs = this.dependencyLibrary.loadSyncedPrefs()
+    if (!syncedPrefs.read('promptForAdditional')) return
+    const anotherAlert = new Alert('Add more dependent tasks?', '')
+    anotherAlert.addOption('Yes')
+    anotherAlert.addOption('No')
+    const index = await anotherAlert.show()
+    if (index === 0) prereqTasks.forEach(task => task.addTag(markerTag))
   })
 
   action.validate = async function (selection, sender) {
