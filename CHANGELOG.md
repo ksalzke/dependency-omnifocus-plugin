@@ -1,3 +1,12 @@
+## [4.1.1](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.1.0...v4.1.1) (2022-01-26)
+
+
+### Bug Fixes
+
+* :bug: fix case where a tag no longer exists ([bec78c9](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/bec78c9a7406d361c8d0e3e74ec117213351e80f))
+
+
+
 # [4.1.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.0.0...v4.1.0) (2022-01-25)
 
 
