@@ -135,7 +135,7 @@
     const preferences = dependencyLibrary.loadSyncedPrefs()
     const tagID = preferences.readString(`${prefTag}ID`)
 
-    if (tagID !== null) return Tag.byIdentifier(tagID)
+    if (tagID !== null && Tag.byIdentifier(tagID) !== null) return Tag.byIdentifier(tagID)
 
     // if not set, show preferences pane and then try again
     await this.action('preferences').perform()
