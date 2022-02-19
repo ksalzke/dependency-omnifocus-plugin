@@ -1,3 +1,13 @@
+# [4.2.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.1.1...v4.2.0) (2022-02-19)
+
+
+### Features
+
+* :lipstick: rename 'Preferences' to 'Preferences: Dependency' ([5ca7dd3](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/5ca7dd3be8a05418b9429e1357333640fa313c9c))
+* :sparkles: update validation so actions always available ([162806f](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/162806f221425fe9054467d363eb0f2185141219))
+
+
+
 ## [4.1.1](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.1.0...v4.1.1) (2022-01-26)
 
 
