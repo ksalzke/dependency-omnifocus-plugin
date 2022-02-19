@@ -8,11 +8,11 @@ _Please note that all scripts on my GitHub account (or shared elsewhere) are wor
 
 Refer to ['issues'](https://github.com/ksalzke/dependency-omnifocus-plugin/issues) for known issues and planned changes/enhancements.
 
-Changes to the way data from this plugin is stored were made in version 3. If you were using a previous version, you can use the script `updateToV3.omnifocusjs` (saved in this repository) to move to the new structure. Simply move this file into your plugins folder; once it has been run once, it may be deleted.
+Changes to the way data from this plug-in is stored were made in version 3. If you were using a previous version, you can use the script `updateToV3.omnifocusjs` (saved in this repository) to move to the new structure. Simply move this file into your plug-ins folder; once it has been run once, it may be deleted.
 
 # Installation & Set-Up
 
-**Important note: for this plug-in bundle to work correctly, my [Synced Preferences for OmniFocus plugin](https://github.com/ksalzke/synced-preferences-for-omnifocus) is also required and needs to be added to the plug-in folder separately.**
+**Important note: for this plug-in bundle to work correctly, my [Synced Preferences for OmniFocus plug-in](https://github.com/ksalzke/synced-preferences-for-omnifocus) is also required and needs to be added to the plug-in folder separately.**
 
 1. Download the [latest release](https://github.com/ksalzke/dependency-omnifocus-plugin/releases/latest).
 2. Unzip the downloaded file.
@@ -20,7 +20,7 @@ Changes to the way data from this plugin is stored were made in version 3. If yo
 4. Manually create the three tags below in OmniFocus. (These can be placed anywhere in your OmniFocus database.)
 5. Configure your preferences using the `Preferences` action. (Note that to run this action on iOS, no tasks can be selected.)
 
-The plugin makes use of three tags:
+The plug-in makes use of three tags:
 
 | Tag          | Example             | Description                                                                                                             |
 | ------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -112,7 +112,7 @@ This action can be run when no tasks or projects are selected. It runs the `upda
 
 ## Preferences
 
-This action allows the user to set the preferences for the plug-in. These sync between devices using the Synced Preferences plugin linked above.
+This action allows the user to set the preferences for the plug-in. These sync between devices using the Synced Preferences plug-in linked above.
 
 There is a preference to select each of the tags outlined above. In addition, the following preferences are available:
 
@@ -123,17 +123,17 @@ There is a preference to select each of the tags outlined above. In addition, th
 
 # Functions
 
-This plugin contains the following functions within the `dependencyLibrary` library:
+This plug-in contains the following functions within the `dependencyLibrary` library:
 
 ## `loadSyncedPrefs () : SyncedPref`
 
-Returns the [SyncedPref](https://github.com/ksalzke/synced-preferences-for-omnifocus) object for this plugin.
+Returns the [SyncedPref](https://github.com/ksalzke/synced-preferences-for-omnifocus) object for this plug-in.
 
-If the user does not have the plugin installed correctly, they are alerted.
+If the user does not have the plug-in installed correctly, they are alerted.
 
 ## `getLinks () : Array<Array[string]>`
 
-Returns an array containing a list of dependency pairs, as stored in the SyncedPref object for this plugin.
+Returns an array containing a list of dependency pairs, as stored in the SyncedPref object for this plug-in.
 
 Each pair is stored as a two-element array: the first is the ID of the prerequisite task and the second is the ID of the dependent task.
 
@@ -149,7 +149,7 @@ Before creating the new notes, it removes any existing notes linking the two tas
 
 ## `removeNotes (prereq: Task, dep: Task)`
 
-This function removes the note 'link' between the two tasks. This includes those in the form specified above, as well as some other forms previously used by this plugin.
+This function removes the note 'link' between the two tasks. This includes those in the form specified above, as well as some other forms previously used by this plug-in.
 
 ## `removeAllNotes ()`
 

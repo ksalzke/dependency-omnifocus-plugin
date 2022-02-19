@@ -2,7 +2,7 @@
   "defaultLocale": "en",
   "identifier": "com.KaitlinSalzke.DependencyForOmniFocus",
   "author": "Kaitlin Salzke",
-  "description": "An OmniFocus plugin that enables task dependency outside of the built-in sequential action group structure",
+  "description": "An OmniFocus plug-in that enables task dependency outside of the built-in sequential action group structure",
   "version": "4.1.1",
   "actions": [
     {
