@@ -3,7 +3,7 @@
   "identifier": "com.KaitlinSalzke.DependencyForOmniFocus",
   "author": "Kaitlin Salzke",
   "description": "An OmniFocus plug-in that enables task dependency outside of the built-in sequential action group structure",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "actions": [
     {
       "identifier": "addPrerequisiteMarker",

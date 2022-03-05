@@ -1,3 +1,12 @@
+## [4.2.1](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.2.0...v4.2.1) (2022-03-05)
+
+
+### Bug Fixes
+
+* :bug: fix bug where dates were removed when checking for duplicates, causing dependents of prerequisites with repetitions to never become available ([fed2213](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/fed2213ded553b8c4ca73cec5910efbc8505c3c5))
+
+
+
 # [4.2.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.1.1...v4.2.0) (2022-02-19)
 
 
