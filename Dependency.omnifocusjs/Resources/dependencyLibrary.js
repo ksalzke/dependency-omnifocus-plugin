@@ -179,7 +179,7 @@
   dependencyLibrary.updateDependencies = async () => {
     // remove duplicates
     const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
-    const linksWithDuplicates = dependencyLibrary.getLinks().map(link => [link[0], link[1]])
+    const linksWithDuplicates = dependencyLibrary.getLinks().map(link => [link[0], link[1], link[2]])
     const links = Array.from(new Set(linksWithDuplicates.map(JSON.stringify)), JSON.parse)
     syncedPrefs.write('links', links)
 
