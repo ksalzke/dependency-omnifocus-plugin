@@ -1,4 +1,3 @@
-/* global PlugIn Version Project Alert Tag Task */
 (() => {
   const dependencyLibrary = new PlugIn.Library(new Version('1.0'))
 
@@ -24,7 +23,7 @@
 
   dependencyLibrary.addNotes = (prereq, dep) => {
     // remove note before adding - prevents note being added twice
-    dependencyLibrary.removeNotes (prereq, dep)
+    dependencyLibrary.removeNotes(prereq, dep)
 
     dep.note = `[ Go to prerequisite task: omnifocus:///task/${prereq.id.primaryKey} ] ${prereq.name}\n\n${dep.note}`
     prereq.note = `[ Go to dependent task: omnifocus:///task/${dep.id.primaryKey} ] ${dep.name}\n\n${prereq.note}`
@@ -189,10 +188,10 @@
       const [prereq, dep, date] = [Task.byIdentifier(prereqID), Task.byIdentifier(depID), new Date(dateString)]
 
       const lastInstance = (task) => {
-          // returns latest instance of a repeating task, or current instance if no previous instances
-          const instances = flattenedTasks.filter(t => t.id.primaryKey.includes(task.id.primaryKey))
-          const last = instances.sort((a, b) => b.id.primaryKey.split('.')[1] - a.id.primaryKey.split('.')[1])[0]
-          return last
+        // returns latest instance of a repeating task, or current instance if no previous instances
+        const instances = flattenedTasks.filter(t => t.id.primaryKey.includes(task.id.primaryKey))
+        const last = instances.sort((a, b) => b.id.primaryKey.split('.')[1] - a.id.primaryKey.split('.')[1])[0]
+        return last
       }
 
       return prereq === null || dep === null || prereq.taskStatus === Task.Status.Completed || prereq.taskStatus === Task.Status.Dropped || dep.taskStatus === Task.Status.Completed || dep.taskStatus === Task.Status.Dropped || (prereq.repetitionRule !== null && date !== null && lastInstance(prereq).completionDate > date)
