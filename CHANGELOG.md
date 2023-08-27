@@ -1,3 +1,17 @@
+# [4.3.0](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.2.1...v4.3.0) (2023-08-27)
+
+
+### Bug Fixes
+
+* :bug: fix bug where multiple dependencies can not be added simultaneously ([de0da7e](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/de0da7ef4b5675a92e2b0977b7560e60dfc4a346)), closes [#30](https://github.com/ksalzke/dependency-omnifocus-plugin/issues/30)
+
+
+### Features
+
+* :sparkles: add 'search and add' actions ([69aedac](https://github.com/ksalzke/dependency-omnifocus-plugin/commit/69aedac859d1ae3cd1b5b8190da625bd92afbaf6))
+
+
+
 ## [4.2.1](https://github.com/ksalzke/dependency-omnifocus-plugin/compare/v4.2.0...v4.2.1) (2022-03-05)
 
 
