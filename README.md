@@ -52,6 +52,18 @@ Optionally, the user may choose to be prompted to add another dependent task. (T
 
 <img width="541" alt="Example note" src="https://user-images.githubusercontent.com/16893787/144363485-eb9d4e6a-a9d6-4af3-9b97-46ed23c9b31b.png">
 
+## Search and Add Prerequisite(s)
+
+This action is available when one or more tasks or projects are selected.
+
+The user is prompted to search the database for one or more tasks, and these are then added as prerequisites of the selected task(s) and/or project(s).
+
+## Search and Add Dependant(s)
+
+This action is available when one or more tasks or projects are selected.
+
+The user is prompted to search the database for one or more tasks, and these are then added as dependants of the selected task(s) and/or project(s).
+
 ## Remove Prerequisite(s)
 
 This action is available when one or more tasks or projects with prerequisite actions are selected.
@@ -130,6 +142,10 @@ This plug-in contains the following functions within the `dependencyLibrary` lib
 Returns the [SyncedPref](https://github.com/ksalzke/synced-preferences-for-omnifocus) object for this plug-in.
 
 If the user does not have the plug-in installed correctly, they are alerted.
+
+## `getFuzzySearchLib (): PlugIn.Library`
+
+Returns the library from my [Fuzzy Search Library](https://github.com/ksalzke/fuzzy-search-library) plug-in.
 
 ## `getLinks () : Array<Array[string]>`
 

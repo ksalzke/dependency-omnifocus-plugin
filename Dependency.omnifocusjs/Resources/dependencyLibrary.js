@@ -16,6 +16,18 @@
     }
   }
 
+  dependencyLibrary.getFuzzySearchLib = () => {
+    const fuzzySearchPlugIn = PlugIn.find('com.KaitlinSalzke.fuzzySearchLib', null)
+    if (!fuzzySearchPlugIn) {
+        const alert = new Alert(
+            'Fuzzy Search Library Required',
+            'For the \'Search & Add...\' actions of the Dependency plug-in to work correctly, the \'Fuzzy Search\' plug-in (https://github.com/ksalzke/fuzzy-search-library) is also required and needs to be added to the plug-in folder separately. Either you do not currently have this plugin installed, or it is not installed correctly.'
+        )
+        alert.show(null)
+    }
+    return fuzzySearchPlugIn.library('fuzzySearchLib')
+}
+
   dependencyLibrary.getLinks = () => {
     const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
     return syncedPrefs.read('links') || []
@@ -138,6 +150,7 @@
       if (dep.hasChildren && dep.sequential) dependencyLibrary.removeDependency(dep.children[0], prereq)
       else if (dep.hasChildren) dep.children.forEach(child => dependencyLibrary.removeDependency(child, prereq))
     }
+  return
   }
 
   dependencyLibrary.getPrefTag = async (prefTag) => {

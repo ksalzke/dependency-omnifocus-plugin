@@ -14,6 +14,14 @@
       "image": "key.fill"
     },
     {
+      "identifier": "searchAndAddPrereq",
+      "image": "magnifyingglass.circle"
+    },
+    {
+      "identifier": "searchAndAddDep",
+      "image": "magnifyingglass.circle.fill"
+    },
+    {
       "identifier": "removePrerequisites",
       "image": "delete.left.fill"
     },
