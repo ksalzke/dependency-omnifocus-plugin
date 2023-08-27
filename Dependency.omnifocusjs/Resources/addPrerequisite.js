@@ -11,7 +11,7 @@
     const prereqTasks = Array.from(markerTag.tasks)
 
     // add all selected tasks as dependents
-    prereqTasks.forEach((prereq) => deps.forEach(async (dep) => await this.dependencyLibrary.addDependency(prereq, dep)))
+    await this.dependencyLibrary.addDependencies(prereqTasks, deps)
 
     // show prompt re whether there are more tasks to be linked, if option is set
     const syncedPrefs = this.dependencyLibrary.loadSyncedPrefs()

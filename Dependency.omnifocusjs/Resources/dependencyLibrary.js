@@ -61,6 +61,15 @@
     links.forEach(link => dependencyLibrary.addNotes(Task.byIdentifier(link[0]), Task.byIdentifier(link[1])))
   }
 
+  dependencyLibrary.addDependencies = async (prereqs, deps) => {
+    for (const prereq of prereqs) {
+      for (const dep of deps) {
+        await dependencyLibrary.addDependency(prereq, dep)
+      }
+    }
+    return
+  }
+
   dependencyLibrary.addDependency = async (prereq, dep) => {
     const syncedPrefs = dependencyLibrary.loadSyncedPrefs()
     const links = dependencyLibrary.getLinks()
@@ -89,6 +98,7 @@
 
     // remove marker tag used for processing
     prereq.removeTag(markerTag)
+    return
   }
 
   dependencyLibrary.removeDependency = async (prereqID, depID) => {

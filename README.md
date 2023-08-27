@@ -159,6 +159,10 @@ This function runs `removeNotes` for all links.
 
 This function runs `addNotes` for all links.
 
+## `addDependencies (prereqs: Task[], deps: Task[]): Promise`
+
+This asynchronous function creates a dependency between all of the prerequisite tasks and all of the dependent tasks (using the `addDependency` function).
+
 ## `addDependency (prereq: Task, dep: Task) : Promise`
 
 This asynchronous function:
