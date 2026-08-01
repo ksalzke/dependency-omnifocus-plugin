@@ -10,15 +10,21 @@ Refer to ['issues'](https://github.com/ksalzke/dependency-omnifocus-plugin/issue
 
 Changes to the way data from this plug-in is stored were made in version 3. If you were using a previous version, you can use the script `updateToV3.omnifocusjs` (saved in this repository) to move to the new structure. Simply move this file into your plug-ins folder; once it has been run once, it may be deleted.
 
-# Installation & Set-Up
 
-**Important note: for this plug-in bundle to work correctly, my [Synced Preferences for OmniFocus plug-in](https://github.com/ksalzke/synced-preferences-for-omnifocus) is also required and needs to be added to the plug-in folder separately.**
+## Prerequisites 
 
-1. Download the [latest release](https://github.com/ksalzke/dependency-omnifocus-plugin/releases/latest).
-2. Unzip the downloaded file.
-3. Move the `.omnifocusjs` file to your OmniFocus plug-in library folder (or open it to install).
-4. Manually create the three tags below in OmniFocus. (These can be placed anywhere in your OmniFocus database.)
-5. Configure your preferences using the `Preferences` action. (Note that to run this action on iOS, no tasks can be selected.)
+This plug-in requires [Synced Preferences for OmniFocus](https://github.com/ksalzke/synced-preferences-for-omnifocus). Install it separately before using this plug-in.
+
+## Installation
+
+[![Install in OmniFocus](https://img.shields.io/badge/OmniFocus-Install-5E5CE6?style=flat-square)](https://ksalzke.github.io/omnifocus-plugin-installer/?repo=dependency-omnifocus-plugin)
+
+Select **Install** above, then follow the prompts.
+
+## Set-Up
+
+1. Manually create the three tags below in OmniFocus. (These can be placed anywhere in your OmniFocus database.)
+2. Configure your preferences using the `Preferences` action. (Note that to run this action on iOS, no tasks can be selected.)
 
 The plug-in makes use of three tags:
 
